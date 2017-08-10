@@ -24,7 +24,7 @@ print('可以開始輸入了...')
 while True:
     try:
         print(chatbot.get_response(input()))
-        
+
     # Press ctrl-c or ctrl-d on the keyboard to exit
     except (KeyboardInterrupt, EOFError, SystemExit):
         break
