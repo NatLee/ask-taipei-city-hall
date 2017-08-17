@@ -1,13 +1,30 @@
 version: '3'
 services:
-  chatbot:
-    build: .
-    # command: python main.py
-    links:
-        - db
-    environment:
-        localhost: db
-  db:
-    image: mongo
-    ports:
-          - "27017:27017"
+    chatbot:
+        build: .
+        command: python -u main.py
+        ports:
+            - "5000:5000"
+        volumes:
+            - ".:/chatbot"
+        links:
+            - db
+        networks:
+            net:
+                ipv4_address: 10.0.0.2
+    db:
+        image: mongo
+        ports:
+            - "27017:27017"
+        volumes:
+            - "./data:/data/db"
+        networks:
+            net:
+                ipv4_address: 10.0.0.3
+network:
+    net:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 10.5.0.0/16
+                  gateway: 10.5.0.1
