@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 services:
     chatbot:
         build: .
@@ -11,7 +11,7 @@ services:
             - db
         networks:
             net:
-                ipv4_address: 10.0.0.2
+                ipv4_address: 10.5.0.5
     db:
         image: mongo
         ports:
@@ -20,8 +20,8 @@ services:
             - "./data:/data/db"
         networks:
             net:
-                ipv4_address: 10.0.0.3
-network:
+                ipv4_address: 10.5.0.6
+networks:
     net:
         driver: bridge
         ipam:
