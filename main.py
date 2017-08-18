@@ -1,3 +1,5 @@
+# coding: utf-8
+
 from flask import Flask, request, abort
 from linebot import (LineBotApi, WebhookHandler)
 from linebot.exceptions import (InvalidSignatureError)
@@ -10,12 +12,15 @@ import _thread
 chatbot = ChatBot(
     'Test',
     storage_adapter="chatterbot.storage.MongoDatabaseAdapter",
-    #logic_adapters=['chatterbot.logic.BestMatch'],
-    #filters=['chatterbot.filters.RepetitiveResponseFilter'],
-    database_uri="mongodb://172.17.0.1:27017/",
+    logic_adapters=['chatterbot.logic.BestMatch'],
+    filters=['chatterbot.filters.RepetitiveResponseFilter'],
+    #database_uri="mongodb://localhost:27017/",
+    database_uri="mongodb://10.5.0.6:27017/",
     database='chatterbot-database'
     )
 
+#chatbot.set_trainer(ChatterBotCorpusTrainer)
+#chatbot.train("./textData")
 
 app = Flask(__name__)
 
@@ -63,4 +68,4 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token,TextSendMessage(text='回應字數超過上限，請待資料庫更新。'))
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0')

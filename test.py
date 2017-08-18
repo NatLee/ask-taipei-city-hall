@@ -15,9 +15,8 @@ chatbot = ChatBot(
     database='chatterbot-database'
     )
 
-#chatbot.set_trainer(ChatterBotCorpusTrainer)
-
-#chatbot.train("./textData")
+chatbot.set_trainer(ChatterBotCorpusTrainer)
+chatbot.train("./textData")
 
 print('可以開始輸入了...')
 

@@ -1,2 +1,7 @@
 *.db
 *.sqlite3
+mongod.lock
+WiredTiger
+WiredTiger.lock
+WiredTiger.wt
+WiredTiger.wt.1

@@ -5,8 +5,8 @@ services:
         command: python -u main.py
         ports:
             - "5000:5000"
-        volumes:
-            - ".:/chatbot"
+        #volumes:
+        #    - ".:/chatbot"
         links:
             - db
         networks:
@@ -16,8 +16,8 @@ services:
         image: mongo
         ports:
             - "27017:27017"
-        volumes:
-            - "./data:/data/db"
+        #volumes:
+        #    - "./data:/data/db"
         networks:
             net:
                 ipv4_address: 10.5.0.6
