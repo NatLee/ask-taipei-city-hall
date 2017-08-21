@@ -12,7 +12,7 @@ chatbot = ChatBot(
         'chatterbot.filters.RepetitiveResponseFilter'
     ],
     database_uri="mongodb://localhost:27017/",
-    database='chatterbot-database2',
+    database='chatterbot-database3',
     read_only=True
     )
 
