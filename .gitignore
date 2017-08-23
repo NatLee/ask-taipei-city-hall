@@ -5,3 +5,5 @@ WiredTiger
 WiredTiger.lock
 WiredTiger.wt
 WiredTiger.wt.1
+data/
+*.log
