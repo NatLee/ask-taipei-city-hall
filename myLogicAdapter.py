@@ -36,9 +36,7 @@ class MyLogicAdapter(LogicAdapter):
         for statement in statement_list:
             confidence = self.compare_statements(input_statement, statement)
             if confidence < 0.3:
-                confidence = compare(input_statement.text, statement.text)
-                # confidence /= 2
-                if confidence == 1:
+                if compare(input_statement.text, statement.text) == 1:
                     print(statement.text)
             if confidence > closest_match.confidence:
                 statement.confidence = confidence
