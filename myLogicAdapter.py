@@ -1,4 +1,8 @@
+# coding=utf-8
+
 from chatterbot.logic import LogicAdapter
+
+
 def compare(input_statement, statement):
     temp = input_statement
     tokens = statement.split(' ')
@@ -8,6 +12,8 @@ def compare(input_statement, statement):
     return confidence
 
 class MyLogicAdapter(LogicAdapter):
+
+    all_statement_list=''
 
     def get(self, input_statement):
         """
@@ -32,16 +38,22 @@ class MyLogicAdapter(LogicAdapter):
         closest_match = input_statement
         closest_match.confidence = 0
 
+        #f=open('statement_list.txt',encoding='utf-8',mode='w')
+        self.all_statement_list=''
         # Find the closest matching known statement
         for statement in statement_list:
             confidence = self.compare_statements(input_statement, statement)
             if confidence < 0.3:
                 if compare(input_statement.text, statement.text) == 1:
-                    print(statement.text)
+                    self.all_statement_list+=statement.text
+                    self.all_statement_list+='\n'
+                    #f.write(statement.text + '\n')
             if confidence > closest_match.confidence:
                 statement.confidence = confidence
                 closest_match = statement
+        #f.close()
         return closest_match
+
 
     def can_process(self, statement):
         """
@@ -79,9 +91,13 @@ class MyLogicAdapter(LogicAdapter):
                     closest_match.text
                 )
             )
-
             # Set confidence to zero because a random response is selected
             response.confidence = 0
+
+
         response.text = "問題:" + closest_match.text + "\n" + response.text + "\n" + str(response.confidence)
-        # print(test)
+        response.text += 'hangyeeeeeeeeCool'
+        response.text += self.all_statement_list
+        #print(all_statement_list)
+
         return response
