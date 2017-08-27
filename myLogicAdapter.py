@@ -95,7 +95,7 @@ class MyLogicAdapter(LogicAdapter):
             response.confidence = 0
 
 
-        response.text = "問題:" + closest_match.text + "\n" + response.text + "\n" + str(response.confidence)
+        response.text = "問題:" + closest_match.text + "\n" + response.text + "\n" + 'HeyYAYAYA' +str(response.confidence)
         response.text += 'hangyeeeeeeeeCool'
         response.text += self.all_statement_list
         #print(all_statement_list)

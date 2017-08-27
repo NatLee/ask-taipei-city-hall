@@ -8,7 +8,10 @@ import linebot.exceptions
 from chatterbot import ChatBot
 from chatterbot.trainers import ChatterBotCorpusTrainer
 
+
+import config
 #import myLogicAdapter
+
 
 #https://line-chat-test.appspot.com/callback
 chatbot = ChatBot(
@@ -31,8 +34,8 @@ app = Flask(__name__)
 # channel_access_token = '***REMOVED***'
 # channel_secret = '***REMOVED***'
 # hang
-channel_access_token = '***REMOVED***'
-channel_secret = '***REMOVED***'
+channel_access_token = config.channel_access_token
+channel_secret = config.channel_secret
 
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
@@ -71,38 +74,55 @@ def handle_message(event):
     print('使用者: ' + event.message.text)
     #string=str(chatbot.get_response(event.message.text)
 
-    token = 'hangyeeeeeeeeCool'
+    tokenStatement = 'hangyeeeeeeeeCool'
+    tokenConfidence = 'HeyYAYAYA'
     statement = str(chatbot.get_response(event.message.text))
-    all_statement_list = statement.split(token)[1]
-    statement= statement.split(token)[0]
+    print(statement)
+    print('****************')
+    
+    
+    statement_list = statement.split(tokenStatement)[1].split('\n')
+    statement_list.pop()
+    
+    statement = statement.split(tokenStatement)[0]
+    
+    confidence = statement.split(tokenConfidence)[1]
 
-    all_statement_list_split=all_statement_list.split('\n')
-
-    #print(all_statement_list_split)
+    print('****************')
+    print(statement_list)
     #actions.append(MessageTemplateAction(label=all_statement_list_split[0],text=all_statement_list_split[0]))
 
-    for i in range(3):
-        actions.append(MessageTemplateAction(
-            label=str(all_statement_list_split[i]),
-            text=str(all_statement_list_split[i]),
+    if float(confidence)<0.3:
+        if len(statement_list)>3:
+            length = 3
+        else:
+            length = len(statement_list)
+        for i in range(length):
+            actions.append(MessageTemplateAction(
+                label=str(statement_list[i].replace(' ','')[1:20]),
+                text=str(statement_list[i].replace(' ','')[1:20]),
+                )
+            )
+        print(len(actions))
+
+        buttons_template_message = TemplateSendMessage(
+            alt_text='問題選單',
+            template=ButtonsTemplate(
+                title='您可能想問的問題',
+                text='請選擇',
+                actions=actions,
             )
         )
-    print(actions[0])
-    #
-    buttons_template_message = TemplateSendMessage(
-        alt_text='問題選單',
-        template=ButtonsTemplate(
-            title='您可能想問的問題',
-            text='請選擇',
-            actions=actions,
-        )
-    )
+        send=buttons_template_message
+    else:
+        send=TextSendMessage(text=statement)
+
 
     #print('BOT: ' + string)
     print(statement)
     #line_bot_api.reply_message(event.reply_token,TextSendMessage(text=statement))
     try:
-        line_bot_api.reply_message(event.reply_token,buttons_template_message)
+        line_bot_api.reply_message(event.reply_token,send)
     except linebot.exceptions.LineBotApiError as e:
         print(e.status_code)
         print(e.error.message)
