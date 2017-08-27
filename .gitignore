@@ -6,5 +6,6 @@ WiredTiger.lock
 WiredTiger.wt
 WiredTiger.wt.1
 data/
+__pycache__/
 *.log
 *.pyc
