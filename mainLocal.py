@@ -79,13 +79,13 @@ def handle_message(event):
     statement = str(chatbot.get_response(event.message.text))
     print(statement)
     print('****************')
-    
-    
+
+
     statement_list = statement.split(tokenStatement)[1].split('\n')
     statement_list.pop()
-    
+
     statement = statement.split(tokenStatement)[0]
-    
+
     confidence = statement.split(tokenConfidence)[1]
 
     print('****************')
@@ -99,8 +99,10 @@ def handle_message(event):
             length = len(statement_list)
         for i in range(length):
             actions.append(MessageTemplateAction(
-                label=str(statement_list[i].replace(' ','')[1:20]),
-                text=str(statement_list[i].replace(' ','')[1:20]),
+                #label=str(statement_list[i].replace(' ','')[1:20]),
+                #text=str(statement_list[i].replace(' ','')[1:20]),
+                label=str(statement_list[i][1:20]),
+                text=str(statement_list[i][1:20]),
                 )
             )
         print(len(actions))

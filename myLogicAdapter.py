@@ -45,7 +45,7 @@ class MyLogicAdapter(LogicAdapter):
             confidence = self.compare_statements(input_statement, statement)
             if confidence < 0.3:
                 if compare(input_statement.text, statement.text) == 1:
-                    self.all_statement_list+=statement.text
+                    self.all_statement_list+=statement.text.replace(' ','')
                     self.all_statement_list+='\n'
                     #f.write(statement.text + '\n')
             if confidence > closest_match.confidence:
