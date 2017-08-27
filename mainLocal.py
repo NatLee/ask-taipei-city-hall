@@ -2,8 +2,8 @@
 
 from flask import Flask, request, abort
 from linebot import (LineBotApi, WebhookHandler)
-from linebot.exceptions import (InvalidSignatureError)
 from linebot.models import *
+import linebot.exceptions
 
 from chatterbot import ChatBot
 from chatterbot.trainers import ChatterBotCorpusTrainer
@@ -27,9 +27,13 @@ chatbot = ChatBot(
 
 
 app = Flask(__name__)
-
+# nat
+# channel_access_token = '***REMOVED***'
+# channel_secret = '***REMOVED***'
+# hang
 channel_access_token = '***REMOVED***'
 channel_secret = '***REMOVED***'
+
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
@@ -69,27 +73,22 @@ def handle_message(event):
 
     token = 'hangyeeeeeeeeCool'
     statement = str(chatbot.get_response(event.message.text))
-
     all_statement_list = statement.split(token)[1]
     statement= statement.split(token)[0]
-    
+
     all_statement_list_split=all_statement_list.split('\n')
 
     #print(all_statement_list_split)
     #actions.append(MessageTemplateAction(label=all_statement_list_split[0],text=all_statement_list_split[0]))
-    
+
     for i in range(3):
         actions.append(MessageTemplateAction(
             label=str(all_statement_list_split[i]),
             text=str(all_statement_list_split[i]),
             )
         )
-
     print(actions[0])
-
-
-
-    
+    #
     buttons_template_message = TemplateSendMessage(
         alt_text='問題選單',
         template=ButtonsTemplate(
@@ -102,8 +101,12 @@ def handle_message(event):
     #print('BOT: ' + string)
     print(statement)
     #line_bot_api.reply_message(event.reply_token,TextSendMessage(text=statement))
-
-    line_bot_api.reply_message(event.reply_token,buttons_template_message)
+    try:
+        line_bot_api.reply_message(event.reply_token,buttons_template_message)
+    except linebot.exceptions.LineBotApiError as e:
+        print(e.status_code)
+        print(e.error.message)
+        print(e.error.details)
 
     '''
     with open('statement_list.txt',encoding='utf-8',mode='r') as file:
