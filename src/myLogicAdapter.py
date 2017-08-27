@@ -37,7 +37,6 @@ class MyLogicAdapter(LogicAdapter):
         closest_match = input_statement
         closest_match.confidence = 0
 
-        #f=open('statement_list.txt',encoding='utf-8',mode='w')
         self.all_statement_list=''
         # Find the closest matching known statement
         for statement in statement_list:
@@ -46,11 +45,11 @@ class MyLogicAdapter(LogicAdapter):
                 if compare(input_statement.text, statement.text) == 1:
                     self.all_statement_list+=statement.text.replace(' ','')
                     self.all_statement_list+='\n'
-                    #f.write(statement.text + '\n')
+
             if confidence > closest_match.confidence:
                 statement.confidence = confidence
                 closest_match = statement
-        #f.close()
+
         return closest_match
 
 
