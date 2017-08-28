@@ -3,7 +3,7 @@ services:
     chatbot:
         build: .
         container_name: chatbot_server
-        command: python -u mainLocal.py
+        command: python -u main.py
         ports:
             - "5000:5000"
         volumes:
