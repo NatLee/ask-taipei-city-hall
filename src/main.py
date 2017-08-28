@@ -10,6 +10,9 @@ from chatterbot.trainers import ChatterBotCorpusTrainer
 
 import config
 
+import sys
+
+sys.stderr = open('server.log', 'a')
 #https://line-chat-test.appspot.com/callback
 
 chatbot = ChatBot(
@@ -57,8 +60,12 @@ def handle_message(event):
                         text='message text1'
                     )
     '''
-
-    print('使用者: ' + event.message.text)
+    try:
+        profile = line_bot_api.get_profile(event.source.user_id)
+        userName = profile.display_name
+    except:
+        userName = ''
+    userString = userName + ":" + event.message.text
 
     response = str(chatbot.get_response(event.message.text)).replace(' ','')
     confidence = float(response.split('_')[0])
@@ -94,10 +101,12 @@ def handle_message(event):
     else:
         send = TextSendMessage(text = response)
 
-
-    #print('BOT: ' + string)
+    userDataLog = open("userdata.log", mode = 'a', encoding = 'utf-8')
+    userDataLog.write(userString + '\n' + response + '\n' + "confidence = " + str(confidence) + "\n")
+    userDataLog.close()
+    print(userString)
     print(response)
-    #line_bot_api.reply_message(event.reply_token,TextSendMessage(text=response)
+
     try:
         line_bot_api.reply_message(event.reply_token,send)
     except linebot.exceptions.LineBotApiError as e:
