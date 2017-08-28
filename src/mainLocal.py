@@ -59,34 +59,25 @@ def handle_message(event):
     '''
 
     print('使用者: ' + event.message.text)
-    #string=str(chatbot.get_response(event.message.text)
 
-    tokenStatement = 'hangyeeeeeeeeCool'
-    tokenConfidence = 'HeyYAYAYA'
-    statement = str(chatbot.get_response(event.message.text))
-    print(statement)
-    print('****************')
+    response = str(chatbot.get_response(event.message.text)).replace(' ','')
+    confidence = float(response.split('_')[0])
+    response = response.split('_')[1]
+    if confidence < 0.3:
+        response_list = response.split('\n')
+        response_list.pop()
 
-    statement_list = statement.split(tokenStatement)[1].split('\n')
-    statement_list.pop()
-    statement = statement.split(tokenStatement)[0]
-    confidence = statement.split(tokenConfidence)[1]
-
-    print('****************')
-    print(statement_list)
-    #actions.append(MessageTemplateAction(label=all_statement_list_split[0],text=all_statement_list_split[0]))
-
-    if float(confidence) < 0.3:
-        if len(statement_list) > 3:
+        if len(response_list) > 3:
             length = 3
         else:
-            length = len(statement_list)
+            length = len(response_list)
+
         for i in range(length):
             actions.append(MessageTemplateAction(
-                #label=str(statement_list[i].replace(' ','')[1:20]),
-                #text=str(statement_list[i].replace(' ','')[1:20]),
-                label = str(statement_list[i][1:20]),
-                text = str(statement_list[i][1:20]),
+                #label=str(response_list[i].replace(' ','')[1:20]),
+                #text=str(response_list[i].replace(' ','')[1:20]),
+                label = str(response_list[i][1:20]),
+                text = str(response_list[i][1:20]),
                 )
             )
         print(len(actions))
@@ -101,18 +92,19 @@ def handle_message(event):
         )
         send = buttons_template_message
     else:
-        send = TextSendMessage(text = statement)
+        send = TextSendMessage(text = response)
 
 
     #print('BOT: ' + string)
-    print(statement)
-    #line_bot_api.reply_message(event.reply_token,TextSendMessage(text=statement))
+    print(response)
+    #line_bot_api.reply_message(event.reply_token,TextSendMessage(text=response)
     try:
         line_bot_api.reply_message(event.reply_token,send)
     except linebot.exceptions.LineBotApiError as e:
         print(e.status_code)
         print(e.error.message)
         print(e.error.details)
+        line_bot_api.reply_message(event.reply_token,TextSendMessage(text='回應字數超過上限，請待資料庫更新。'))
 
     '''
     with open('statement_list.txt',encoding='utf-8',mode='r') as file:

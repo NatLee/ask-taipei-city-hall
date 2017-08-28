@@ -2,6 +2,7 @@
 
 from chatterbot.logic import LogicAdapter
 
+
 def compare(input_statement, statement):
     temp = input_statement
     tokens = statement.split(' ')
@@ -93,9 +94,14 @@ class MyLogicAdapter(LogicAdapter):
             response.confidence = 0
 
 
-        response.text = "問題:" + closest_match.text + "\n" + response.text + "\n" + 'HeyYAYAYA' +str(response.confidence)
-        response.text += 'hangyeeeeeeeeCool'
-        response.text += self.all_statement_list
+        if response.confidence<0.3:
+            response.text += self.all_statement_list
+        else:
+            response.text = str(response.confidence) + "_關於" + closest_match.text + "\n" + response.text
+
+        #response.text = "問題:" + closest_match.text + "\n" + response.text + "\n" + 'HeyYAYAYA' +str(response.confidence)
+        #response.text += 'hangyeeeeeeeeCool'
+        #response.text += self.all_statement_list
         #print(all_statement_list)
 
         return response

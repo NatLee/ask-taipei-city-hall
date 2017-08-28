@@ -7,7 +7,8 @@ from linebot.models import (MessageEvent, TextMessage, TextSendMessage)
 
 from chatterbot import ChatBot
 from chatterbot.trainers import ChatterBotCorpusTrainer
-import _thread
+
+#import _thread
 
 chatbot = ChatBot(
     'Test',
