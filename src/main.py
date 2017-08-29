@@ -86,8 +86,8 @@ def handle_message(event):
             for i in range(3):
                 actions.append(MessageTemplateAction(
                     #將空白取代後取前20個字填入（在此才將空白取代因最多也只有三項）
-                    label=str(response_list[i].replace(' ','')[1:20]),
-                    text=str(response_list[i].replace(' ','')[1:20]),
+                    label=str(response_list[i].replace(' ','')[0:19]),
+                    text=str(response_list[i].replace(' ','')[0:19]),
                     )
                 )
 
