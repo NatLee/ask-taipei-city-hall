@@ -112,7 +112,7 @@ def handle_message(event):
             
         else:
             #下面是處理資料庫中找不到相關選項時的回應
-            print('資料庫中或許找不到任何相符的選項，只能篩選出最相關的回應')
+            print('資料庫中找不到任何相關的選項')
             print('Bot: ' + response[2])
             #傳送最有可能的回應
             line_bot_api.push_message(event.source.user_id,TextSendMessage(text=response[2]))
