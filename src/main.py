@@ -76,11 +76,12 @@ def handle_message(event):
     if confidence < 0.3:
         #將response中list以\n進行分割得到型態為list的response_list（先不處理空白）
         response_list = response[3].split('\n')
-        #pop掉最後一個空資料
+        #pop掉最後一個空元素
         response_list.pop()
 
-        #判斷list大小，若大於0則取前三個問題
-        if len(response_list) > 0:
+        #判斷list大小，若大於1則取前三個問題
+        #因空的list也算有1個元素
+        if len(response_list) > 1:
             #只要有相關問題則append 3個到選單上
             for i in range(3):
                 actions.append(MessageTemplateAction(
@@ -111,8 +112,8 @@ def handle_message(event):
             
         else:
             #下面是處理資料庫中找不到相關選項時的回應
-            print('資料庫中找不到任何相符的選項')
-            print('Bot: （最相關的回應）' + response[2])
+            print('資料庫中或許找不到任何相符的選項，只能篩選出最相關的回應')
+            print('Bot: ' + response[2])
             #傳送最有可能的回應
             line_bot_api.push_message(event.source.user_id,TextSendMessage(text=response[2]))
             line_bot_api.push_message(event.source.user_id,TextSendMessage(text='以上回答可能無法滿足您的需求'))
