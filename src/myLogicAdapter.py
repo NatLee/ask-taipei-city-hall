@@ -1,5 +1,4 @@
 # coding=utf-8
-
 from chatterbot.logic import LogicAdapter
 
 
@@ -7,13 +6,14 @@ def compare(input_statement, statement):
     temp = input_statement
     tokens = statement.split(' ')
     for token in tokens:
-        temp = temp.replace(token, "",1)
+        temp = temp.replace(token, "", 1)
     confidence = (len(input_statement) - len(temp)) / len(input_statement)
     return confidence
 
+
 class MyLogicAdapter(LogicAdapter):
 
-    all_statement_list=''
+    all_statement_list = ''
 
     def get(self, input_statement):
         """
@@ -38,21 +38,19 @@ class MyLogicAdapter(LogicAdapter):
         closest_match = input_statement
         closest_match.confidence = 0
 
-        self.all_statement_list=''
+        self.all_statement_list = ''
         # Find the closest matching known statement
         for statement in statement_list:
             confidence = self.compare_statements(input_statement, statement)
             if confidence < 0.3:
                 if compare(input_statement.text, statement.text) == 1:
-                    self.all_statement_list+=statement.text.replace(' ','')
-                    self.all_statement_list+='\n'
+                    self.all_statement_list += statement.text.replace(' ', '')
+                    self.all_statement_list += '\n'
 
             if confidence > closest_match.confidence:
                 statement.confidence = confidence
                 closest_match = statement
-
         return closest_match
-
 
     def can_process(self, statement):
         """
@@ -93,17 +91,12 @@ class MyLogicAdapter(LogicAdapter):
             # Set confidence to zero because a random response is selected
             response.confidence = 0
 
-        print('*****ADAPTER RESPONSE******\n' + str(response) + '\nConfidence: ' + str(response.confidence) + '\n**********************')
-
+        print('*****ADAPTER RESPONSE******\n')
+        print(str(response) + '\nConfidence: ' + str(response.confidence))
+        print('\n**********************')
         response.text = str(response.confidence) + '_' + closest_match.text + '_' + response.text
-        
-        if response.confidence<0.3:
-            response.text += '_' + self.all_statement_list
-            
 
-        #response.text = "問題:" + closest_match.text + "\n" + response.text + "\n" + 'HeyYAYAYA' +str(response.confidence)
-        #response.text += 'hangyeeeeeeeeCool'
-        #response.text += self.all_statement_list
-        #print(all_statement_list)
+        if response.confidence < 0.3:
+            response.text += '_' + self.all_statement_list
 
         return response
