@@ -11,26 +11,28 @@ from chatterbot.trainers import ChatterBotCorpusTrainer
 import config
 import sys
 
-#sys.stderr = open('server.log', 'a')
-#https://line-chat-test.appspot.com/callback
+sys.stderr = open('server.log', 'a')
+# https://line-chat-test.appspot.com/callback
 
 chatbot = ChatBot(
     'Test',
     storage_adapter="chatterbot.storage.MongoDatabaseAdapter",
-    logic_adapters=[{'import_path' : 'myLogicAdapter.MyLogicAdapter'}],
-    database_uri = config.db_uri,
-    database = config.db_name,
+    logic_adapters=[{'import_path': 'myLogicAdapter.MyLogicAdapter'}],
+    database_uri=config.db_uri,
+    database=config.db_name,
     read_only=True
-    )
+)
 
 app = Flask(__name__)
 
 line_bot_api = LineBotApi(config.channel_access_token)
 handler = WebhookHandler(config.channel_secret)
 
+
 @app.route('/')
 def index():
     return "<p>Hello YEE!</p>"
+
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -46,11 +48,12 @@ def callback():
         abort(400)
     return 'OK'
 
+
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    actions=[]
+    actions = []
 
-    #抓出使用者名字、ID跟訊息
+    # 抓出使用者名字、ID跟訊息
     try:
         profile = line_bot_api.get_profile(event.source.user_id)
         userName = profile.display_name
@@ -59,7 +62,7 @@ def handle_message(event):
     userString = userName + ': ' + event.message.text
     print(userString)
 
-    #丟入使用者輸入的資料得到response並使用底線切割
+    # 丟入使用者輸入的資料得到response並使用底線切割
     '''
     資料格式：
     response.text = str(response.confidence) + '_' + closest_match.text + '_' + response.text
@@ -68,24 +71,24 @@ def handle_message(event):
     '''
     response = str(chatbot.get_response(event.message.text)).split('_')
 
-    #透過分割後的response得到list中第0個元素即為confidence
+    # 透過分割後的response得到list中第0個元素即為confidence
     confidence = float(response[0])
 
-    #判斷confidence，若其小於0.3則代表現在的response存在問題集合
-    #若其大於等於0.3則代表response可直接處理
+    # 判斷confidence，若其小於0.3則代表現在的response存在問題集合
+    # 若其大於等於0.3則代表response可直接處理
     if confidence < 0.3:
-        #將response中list以\n進行分割得到型態為list的response_list（先不處理空白）
+        # 將response中list以\n進行分割得到型態為list的response_list（先不處理空白）
         response_list = response[3].split('\n')
-        #pop掉最後一個空元素
+        # pop掉最後一個空元素
         response_list.pop()
 
-        #判斷list大小，若大於1則取前三個問題
-        #因空的list也算有1個元素
+        # 判斷list大小，若大於1則取前三個問題
+        # 因空的list也算有1個元素
         if len(response_list) > 1:
-            #只要有相關問題則append 3個到選單上
+            # 只要有相關問題則append 3個到選單上
             for i in range(3):
                 actions.append(MessageTemplateAction(
-                    #將空白取代後取前20個字填入（在此才將空白取代因最多也只有三項）
+                    # 將空白取代後取前20個字填入（在此才將空白取代因最多也只有三項）
                     label=str(response_list[i].replace(' ','')[0:19]),
                     text=str(response_list[i].replace(' ','')[0:19]),
                     )
@@ -93,12 +96,12 @@ def handle_message(event):
 
             print('選單的選項數: ' + str(len(actions)))
 
-            #先將最可能的回應push送出給使用者
+            # 先將最可能的回應push送出給使用者
             print('Bot: （最相關的回應）' + response[2])
 
             line_bot_api.push_message(event.source.user_id,TextSendMessage(text=response[2]))
             line_bot_api.push_message(event.source.user_id,TextSendMessage(text='或許您可以嘗試\n' + 'https://www.google.com.tw/search?q=' + event.message.text))
-            #填入選單
+            # 填入選單
             buttons_template_message = TemplateSendMessage(
                 alt_text = '問題選單',
                 template = ButtonsTemplate(
@@ -111,10 +114,10 @@ def handle_message(event):
             print('Bot: （因項目過多，送出選單）')
 
         else:
-            #下面是處理資料庫中找不到相關選項時的回應
+            # 下面是處理資料庫中找不到相關選項時的回應
             print('資料庫中找不到任何相關的選項')
             print('Bot: ' + response[2])
-            #傳送最有可能的回應
+            # 傳送最有可能的回應
             line_bot_api.push_message(event.source.user_id,TextSendMessage(text=response[2]))
             line_bot_api.push_message(event.source.user_id,TextSendMessage(text='以上回答可能無法滿足您的需求'))
             send = TextSendMessage(text='或許您可以嘗試\n' + 'https://www.google.com.tw/search?q=' + event.message.text)
