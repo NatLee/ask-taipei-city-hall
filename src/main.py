@@ -82,7 +82,6 @@ def handle_message(event):
         # pop掉最後一個空元素
         response_list.pop()
 
-<<<<<<< HEAD
         #計算list大小
         length = len(response_list)
         #判斷list大小，若大於1則進入填入選單判斷式
@@ -93,13 +92,6 @@ def handle_message(event):
                 length = 3
             #只要有相關問題則append 最多3個到選單上
             for i in range(length):
-=======
-        # 判斷list大小，若大於1則取前三個問題
-        # 因空的list也算有1個元素
-        if len(response_list) > 1:
-            # 只要有相關問題則append 3個到選單上
-            for i in range(3):
->>>>>>> 630b895dbbcb9d3896e0234ba6985ca6cfe3b416
                 actions.append(MessageTemplateAction(
                     # 將空白取代後取前20個字填入（在此才將空白取代因最多也只有三項）
                     label=str(response_list[i].replace(' ','')[0:19]),
