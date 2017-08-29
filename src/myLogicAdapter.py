@@ -93,11 +93,13 @@ class MyLogicAdapter(LogicAdapter):
             # Set confidence to zero because a random response is selected
             response.confidence = 0
 
+        print('*****ADAPTER RESPONSE******\n' + str(response) + '\nConfidence: ' + str(response.confidence) + '\n**********************')
 
+        response.text = str(response.confidence) + '_' + closest_match.text + '_' + response.text
+        
         if response.confidence<0.3:
-            response.text += self.all_statement_list
-        else:
-            response.text = str(response.confidence) + "_關於" + closest_match.text + "\n" + response.text
+            response.text += '_' + self.all_statement_list
+            
 
         #response.text = "問題:" + closest_match.text + "\n" + response.text + "\n" + 'HeyYAYAYA' +str(response.confidence)
         #response.text += 'hangyeeeeeeeeCool'
