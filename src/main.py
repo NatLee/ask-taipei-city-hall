@@ -42,7 +42,7 @@ def callback():
     # handle webhook body
     try:
         handler.handle(body, signature)
-    except InvalidSignatureError:
+    except linebot.exceptions.InvalidSignatureError:
         abort(400)
     return 'OK'
 
@@ -67,7 +67,7 @@ def handle_message(event):
         response.text += '_' + self.all_statement_list
     '''
     response = str(chatbot.get_response(event.message.text)).split('_')
-    
+
     #透過分割後的response得到list中第0個元素即為confidence
     confidence = float(response[0])
 
@@ -90,12 +90,12 @@ def handle_message(event):
                     text=str(response_list[i].replace(' ','')[1:20]),
                     )
                 )
-            
+
             print('選單的選項數: ' + str(len(actions)))
 
             #先將最可能的回應push送出給使用者
             print('Bot: （最相關的回應）' + response[2])
-        
+
             line_bot_api.push_message(event.source.user_id,TextSendMessage(text=response[2]))
             line_bot_api.push_message(event.source.user_id,TextSendMessage(text='或許您可以嘗試\n' + 'https://www.google.com.tw/search?q=' + event.message.text))
             #填入選單
@@ -109,7 +109,7 @@ def handle_message(event):
             )
             send = buttons_template_message
             print('Bot: （因項目過多，送出選單）')
-            
+
         else:
             #下面是處理資料庫中找不到相關選項時的回應
             print('資料庫中找不到任何相關的選項')
@@ -125,7 +125,7 @@ def handle_message(event):
     userDataLog = open("userdata.log", mode = 'a', encoding = 'utf-8')
     userDataLog.write(userString + '\n' + response[2] + '\n' + "confidence = " + str(confidence) + "\n")
     userDataLog.close()
-    
+
     try:
         line_bot_api.reply_message(event.reply_token,send)
     except linebot.exceptions.LineBotApiError as e:
