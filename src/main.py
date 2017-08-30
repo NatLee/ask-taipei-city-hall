@@ -105,21 +105,12 @@ def handle_message(event):
             print('Bot: （最相關的回應）' + response[2])
 
             line_bot_api.push_message(event.source.user_id,TextSendMessage(text=response[2]))
-
-            line_bot_api.push_message(
-                event.source.user_id,
-                ButtonsTemplate(
-                    thumbnail_image_url='https://storage.googleapis.com/line-chat-test.appspot.com/SMILE.png',
-                    title='以上回答可能無法滿足您的需求',
-                    text='或許您可以嘗試',
-                    actions=[URITemplateAction(label='搜尋相關結果',uri='https://www.google.com.tw/search?q=' + event.message.text)],
-                )
-            )
-
+            line_bot_api.push_message(event.source.user_id,TextSendMessage(text='或許您可以嘗試\n' + 'https://www.google.com.tw/search?q=' + event.message.text))
             # 填入選單
             buttons_template_message = TemplateSendMessage(
                 alt_text = '問題選單',
                 template = ButtonsTemplate(
+                    thumbnail_image_url='https://storage.googleapis.com/line-chat-test.appspot.com/SMILE.png',
                     title = '發現其他問題',
                     text = '或許下面可能有您想問的問題',
                     actions = actions,
@@ -134,14 +125,8 @@ def handle_message(event):
             print('Bot: ' + response[2])
             # 傳送最有可能的回應
             line_bot_api.push_message(event.source.user_id,TextSendMessage(text=response[2]))
-            #line_bot_api.push_message(event.source.user_id,TextSendMessage(text='以上回答可能無法滿足您的需求'))
-            #send = TextSendMessage(text='或許您可以嘗試\n' + 'https://www.google.com.tw/search?q=' + event.message.text)
-            send = ButtonsTemplate(
-                                thumbnail_image_url='https://storage.googleapis.com/line-chat-test.appspot.com/SMILE.png',
-                                title='以上回答可能無法滿足您的需求',
-                                text='或許您可以嘗試',
-                                actions=[URITemplateAction(label='搜尋相關結果',uri='https://www.google.com.tw/search?q=' + event.message.text)],
-                            )
+            line_bot_api.push_message(event.source.user_id,TextSendMessage(text='以上回答可能無法滿足您的需求'))
+            send = TextSendMessage(text='或許您可以嘗試\n' + 'https://www.google.com.tw/search?q=' + event.message.text)
     else:
         print('Bot: ' + response[2])
         send = TextSendMessage(text = response[2])
