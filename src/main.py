@@ -109,7 +109,7 @@ def handle_message(event):
             line_bot_api.push_message(
                 event.source.user_id,
                 ButtonsTemplate(
-                    thumbnail_image_url='https://example.com/image.jpg',
+                    thumbnail_image_url='https://storage.googleapis.com/line-chat-test.appspot.com/SMILE.png',
                     title='以上回答可能無法滿足您的需求',
                     text='或許您可以嘗試',
                     actions=[URITemplateAction(label='搜尋相關結果',uri='https://www.google.com.tw/search?q=' + event.message.text)],
@@ -137,7 +137,7 @@ def handle_message(event):
             #line_bot_api.push_message(event.source.user_id,TextSendMessage(text='以上回答可能無法滿足您的需求'))
             #send = TextSendMessage(text='或許您可以嘗試\n' + 'https://www.google.com.tw/search?q=' + event.message.text)
             send = ButtonsTemplate(
-                                thumbnail_image_url='https://example.com/image.jpg',
+                                thumbnail_image_url='https://storage.googleapis.com/line-chat-test.appspot.com/SMILE.png',
                                 title='以上回答可能無法滿足您的需求',
                                 text='或許您可以嘗試',
                                 actions=[URITemplateAction(label='搜尋相關結果',uri='https://www.google.com.tw/search?q=' + event.message.text)],
