@@ -15,4 +15,3 @@ yee
 `db.getSiblingDB('admin').runCommand( { setParameter: 1, failIndexKeyTooLong: false } )`
 
 `docker exec -it ID bash`
-test
