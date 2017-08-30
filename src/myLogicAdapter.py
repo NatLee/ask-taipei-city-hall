@@ -2,6 +2,7 @@
 from chatterbot.logic import LogicAdapter
 import datetime
 
+
 def compare(input_statement, statement):
     temp = input_statement
     tokens = statement.split(' ')
