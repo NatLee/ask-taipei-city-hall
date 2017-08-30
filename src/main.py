@@ -11,7 +11,7 @@ from chatterbot.trainers import ChatterBotCorpusTrainer
 import config
 import sys
 
-sys.stderr = open('server.log', 'a')
+#sys.stderr = open('server.log', 'a')
 # https://line-chat-test.appspot.com/callback
 
 chatbot = ChatBot(
@@ -110,7 +110,7 @@ def handle_message(event):
             buttons_template_message = TemplateSendMessage(
                 alt_text = '問題選單',
                 template = ButtonsTemplate(
-                    thumbnail_image_url='https://storage.googleapis.com/line-chat-test.appspot.com/SMILE.png',
+                    thumbnail_image_url='https://raw.githubusercontent.com/NatLee/test/master/PASSION.jpg',
                     title = '發現其他問題',
                     text = '或許下面可能有您想問的問題',
                     actions = actions,
@@ -126,6 +126,11 @@ def handle_message(event):
             # 傳送最有可能的回應
             line_bot_api.push_message(event.source.user_id,TextSendMessage(text=response[2]))
             line_bot_api.push_message(event.source.user_id,TextSendMessage(text='以上回答可能無法滿足您的需求'))
+            image_message = ImageSendMessage(
+                original_content_url='https://raw.githubusercontent.com/NatLee/test/master/SMILE.jpg',
+                preview_image_url='https://raw.githubusercontent.com/NatLee/test/master/SMILE.jpg'
+            )
+            line_bot_api.push_message(event.source.user_id,image_message)
             send = TextSendMessage(text='或許您可以嘗試\n' + 'https://www.google.com.tw/search?q=' + event.message.text)
     else:
         print('Bot: ' + response[2])
