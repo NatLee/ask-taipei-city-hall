@@ -10,6 +10,7 @@ from chatterbot.trainers import ChatterBotCorpusTrainer
 
 import config
 import sys
+import datetime
 
 #sys.stderr = open('server.log', 'a')
 # https://line-chat-test.appspot.com/callback
@@ -52,6 +53,7 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     actions = []
+    totalTime = datetime.datetime.now()
 
     # 抓出使用者名字、ID跟訊息
     try:
@@ -147,6 +149,7 @@ def handle_message(event):
         print(e.error.message)
         print(e.error.details)
         line_bot_api.reply_message(event.reply_token,TextSendMessage(text='啊哦！關於這個問題或許我們遇到了點麻煩。'))
+    print("整體邏輯回話時間：" + str(datetime.datetime.now() - totalTime))
 
 
 if __name__ == "__main__":
