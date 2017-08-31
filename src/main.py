@@ -1,5 +1,4 @@
 # coding: utf-8
-
 from flask import Flask, request, abort
 from linebot import (LineBotApi, WebhookHandler)
 from linebot.models import (
@@ -16,7 +15,7 @@ import config
 import sys
 import datetime
 
-# sys.stderr = open('server.log', 'a')
+sys.stderr = open('server.log', 'a')
 # https://line-chat-test.appspot.com/callback
 
 chatbot = ChatBot(
