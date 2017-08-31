@@ -55,6 +55,7 @@ def handle_message(event):
     actions = []
     totalTime = datetime.datetime.now()
 
+    time1 = datetime.datetime.now()
     # 抓出使用者名字、ID跟訊息
     try:
         profile = line_bot_api.get_profile(event.source.user_id)
@@ -63,6 +64,7 @@ def handle_message(event):
         userName = ''
     userString = userName + ': ' + event.message.text
     print(userString)
+    print("讀取使用者資料花費時間：" + str(datetime.datetime.now() - time1))
 
     # 丟入使用者輸入的資料得到response並使用底線切割
     '''
@@ -152,6 +154,7 @@ def handle_message(event):
     userDataLog.close()
     print("處理資料回答花費時間：" + str(datetime.datetime.now() - time1))
 
+    time1 = datetime.datetime.now()
     try:
         line_bot_api.reply_message(event.reply_token, send)
     except linebot.exceptions.LineBotApiError as e:
@@ -160,6 +163,7 @@ def handle_message(event):
         print(e.error.details)
         line_bot_api.reply_message(
             event.reply_token, TextSendMessage(text='啊哦！關於這個問題或許我們遇到了點麻煩。'))
+    print("回覆使用者花費時間：" + str(datetime.datetime.now() - time1))
     print("整體運作時間：" + str(datetime.datetime.now() - totalTime))
 
 
