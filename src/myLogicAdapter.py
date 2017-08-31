@@ -2,6 +2,7 @@
 from chatterbot.logic import LogicAdapter
 import datetime
 
+
 def compare(input_statement, statement):
     temp = input_statement
     tokens = statement.split(' ')
@@ -22,7 +23,7 @@ class MyLogicAdapter(LogicAdapter):
         """
         time = datetime.datetime.now()
         statement_list = self.chatbot.storage.get_response_statements()
-        print("讀取所有回答的時間："+str(datetime.datetime.now()-time))
+        print("讀取所有回答的時間：" + str(datetime.datetime.now() - time))
 
         if not statement_list:
             if self.chatbot.storage.count():
@@ -53,7 +54,7 @@ class MyLogicAdapter(LogicAdapter):
             if confidence > closest_match.confidence:
                 statement.confidence = confidence
                 closest_match = statement
-        print("尋找最佳回答時間："+str(datetime.datetime.now()-time))
+        print("尋找最佳回答時間：" + str(datetime.datetime.now() - time))
         return closest_match
 
     def can_process(self, statement):
@@ -84,7 +85,8 @@ class MyLogicAdapter(LogicAdapter):
             )
             response = self.select_response(input_statement, response_list)
             response.confidence = closest_match.confidence
-            self.logger.info('Response selected. Using "{}"'.format(response.text))
+            self.logger.info(
+                'Response selected. Using "{}"'.format(response.text))
         else:
             response = self.chatbot.storage.get_random()
             self.logger.info(
@@ -98,7 +100,8 @@ class MyLogicAdapter(LogicAdapter):
         print('*****ADAPTER RESPONSE******\n')
         print(str(response) + '\nConfidence: ' + str(response.confidence))
         print('\n**********************')
-        response.text = str(response.confidence) + '_' + closest_match.text + '_' + response.text
+        response.text = str(response.confidence) + '_' + \
+            closest_match.text + '_' + response.text
 
         if response.confidence < 0.3:
             response.text += '_' + self.all_statement_list
