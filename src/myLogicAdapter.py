@@ -44,14 +44,14 @@ class MyLogicAdapter(LogicAdapter):
         self.all_statement_list = ''
         # Find the closest matching known statement
         time = datetime.datetime.now()
+        time1 = datetime.datetime.now()
         for statement in statement_list:
             confidence = self.compare_statements(input_statement, statement)
             if confidence < 0.3:
-                time1 = datetime.datetime.now()
                 if compare(input_statement.text, statement.text) == 1:
                     self.all_statement_list += statement.text.replace(' ', '')
                     self.all_statement_list += '\n'
-                print("信心水準<0.3，目前比對到：" + str(datetime.datetime.now() - time1))
+                print("信心水準<0.3，def compare累計花費時間：" + str(datetime.datetime.now() - time1))
 
             if confidence > closest_match.confidence:
                 statement.confidence = confidence
