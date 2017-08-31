@@ -1,14 +1,22 @@
 # coding=utf-8
 from chatterbot.logic import LogicAdapter
 import time as T
+import numpy
 
 
 def compare(input_statement, statement):
-    temp = input_statement
+    temp = numpy.zeros(len(input_statement))
     tokens = statement.split(' ')
     for token in tokens:
-        temp = temp.replace(token, "", 1)
-    confidence = (len(input_statement) - len(temp)) / len(input_statement)
+        find_index = input_statement.find(token)
+        if find_index >= 0:
+            for i in range(len(token)):
+                temp[find_index+i] += 1
+    count = 0
+    for i in range(len(input_statement)):
+        if temp[i] != 0:
+            count += 1
+    confidence = (count / len(input_statement))
     return confidence
 
 

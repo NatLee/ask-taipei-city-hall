@@ -135,8 +135,9 @@ def handle_message(event):
     # 若其大於等於0.3則代表response可直接處理
     if confidence < 0.3:
         line_bot_api.push_message(
-            event.source.user_id, TextSendMessage(text='以上回答可能無法滿足您的需求'))
-
+            event.source.user_id,
+            TextSendMessage(text='以上回答可能無法滿足您的需求')
+        )
         # 將response中list以\n進行分割得到型態為list的response_list（先不處理空白）
         response_list = response[3].split('\n')
         # pop掉最後一個空元素
