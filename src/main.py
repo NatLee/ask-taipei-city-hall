@@ -48,7 +48,6 @@ def get_linebot_menu(response_list):
     print('選單的選項數: ' + str(len(actions)))
 
     # 先將最可能的回應push送出給使用者
-    print('Bot: （最相關的回應）' + response[2])
     buttons_template_message = TemplateSendMessage(
         alt_text='問題選單',
         template=ButtonsTemplate(
@@ -102,16 +101,20 @@ def handle_message(event):
     print(userString)
     print("讀取使用者資料花費時間：" + str(datetime.datetime.now() - time1))
 
-    # 丟入使用者輸入的資料得到response並使用底線切割
     '''
     資料格式：
     response.text = str(response.confidence) + '_' + closest_match.text + '_' + response.text
     if response.confidence<0.3:
         response.text += '_' + self.all_statement_list
     '''
+
     time1 = datetime.datetime.now()
+    # 丟入使用者輸入的資料得到response並使用底線切割
     response = str(chatbot.get_response(event.message.text)).split('_')
+    # 透過分割後的response得到list中第0個元素即為confidence
+    confidence = float(response[0])
     print("邏輯運作時間：" + str(datetime.datetime.now() - time1))
+
     time1 = datetime.datetime.now()
     # 先回找到的答案在判斷要補輸出什麼
     send = TextSendMessage(text=response[2])
@@ -127,15 +130,10 @@ def handle_message(event):
     print("回覆使用者花費時間：" + str(datetime.datetime.now() - time1))
 
     time1 = datetime.datetime.now()
-    # 透過分割後的response得到list中第0個元素即為confidence
-    confidence = float(response[0])
 
     # 判斷confidence，若其小於0.3則代表現在的response存在問題集合
     # 若其大於等於0.3則代表response可直接處理
     if confidence < 0.3:
-        # 傳送最有可能的回應
-        line_bot_api.push_message(
-            event.source.user_id, TextSendMessage(text=response[2]))
         line_bot_api.push_message(
             event.source.user_id, TextSendMessage(text='以上回答可能無法滿足您的需求'))
 
@@ -148,12 +146,8 @@ def handle_message(event):
         # 判斷list大小，若大於1則進入填入選單判斷式
         # 因空的list也算有1個元素
         if length > 1:
-            line_bot_api.push_message(event.source.user_id, TextSendMessage(
-                text='或許您可以嘗試\n' +
-                'https://www.google.com.tw/search?q=' + event.message.text)
-            )
             # 填入選單
-            line_bot_api.push_message(event.source.user_id,get_linebot_menu(response_list))
+            line_bot_api.push_message(event.source.user_id, get_linebot_menu(response_list))
             print('Bot: （因項目過多，送出選單）')
         else:
             # 下面是處理資料庫中找不到相關選項時的回應
@@ -163,13 +157,11 @@ def handle_message(event):
                 preview_image_url='https://raw.githubusercontent.com/NatLee/test/master/SMILE.jpg'
             )
             line_bot_api.push_message(event.source.user_id, image_message)
-            line_bot_api.push_message(
-                event.source.user_id,
-                TextSendMessage(
-                    text='或許您可以嘗試\n' +
-                    'https://www.google.com.tw/search?q=' + event.message.text
-                )
-            )
+
+        line_bot_api.push_message(event.source.user_id, TextSendMessage(
+            text='或許您可以嘗試\n' +
+            'https://www.google.com.tw/search?q=' + event.message.text)
+        )
 
     userDataLog = open("userdata.log", mode='a', encoding='utf-8')
     userDataLog.write(
