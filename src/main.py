@@ -112,6 +112,19 @@ def handle_message(event):
     time1 = datetime.datetime.now()
     response = str(chatbot.get_response(event.message.text)).split('_')
     print("邏輯運作時間：" + str(datetime.datetime.now() - time1))
+    time1 = datetime.datetime.now()
+    # 先回找到的答案在判斷要補輸出什麼
+    send = TextSendMessage(text=response[2])
+    print('Bot: ' + response[2])
+    try:
+        line_bot_api.reply_message(event.reply_token, send)
+    except linebot.exceptions.LineBotApiError as e:
+        print(e.status_code)
+        print(e.error.message)
+        print(e.error.details)
+        line_bot_api.reply_message(
+            event.reply_token, TextSendMessage(text='啊哦！關於這個問題或許我們遇到了點麻煩。'))
+    print("回覆使用者花費時間：" + str(datetime.datetime.now() - time1))
 
     time1 = datetime.datetime.now()
     # 透過分割後的response得到list中第0個元素即為confidence
@@ -136,41 +149,33 @@ def handle_message(event):
         # 因空的list也算有1個元素
         if length > 1:
             line_bot_api.push_message(event.source.user_id, TextSendMessage(
-                text='或許您可以嘗試\n' + 'https://www.google.com.tw/search?q=' + event.message.text))
+                text='或許您可以嘗試\n' +
+                'https://www.google.com.tw/search?q=' + event.message.text)
+            )
             # 填入選單
-            send = get_linebot_menu(response_list)
+            line_bot_api.push_message(event.source.user_id,get_linebot_menu(response_list))
             print('Bot: （因項目過多，送出選單）')
         else:
             # 下面是處理資料庫中找不到相關選項時的回應
             print('資料庫中找不到任何相關的選項')
-            print('Bot: ' + response[2])
             image_message = ImageSendMessage(
                 original_content_url='https://raw.githubusercontent.com/NatLee/test/master/SMILE.jpg',
                 preview_image_url='https://raw.githubusercontent.com/NatLee/test/master/SMILE.jpg'
             )
             line_bot_api.push_message(event.source.user_id, image_message)
-            send = TextSendMessage(
-                text='或許您可以嘗試\n' + 'https://www.google.com.tw/search?q=' + event.message.text)
-    else:
-        print('Bot: ' + response[2])
-        send = TextSendMessage(text=response[2])
+            line_bot_api.push_message(
+                event.source.user_id,
+                TextSendMessage(
+                    text='或許您可以嘗試\n' +
+                    'https://www.google.com.tw/search?q=' + event.message.text
+                )
+            )
 
     userDataLog = open("userdata.log", mode='a', encoding='utf-8')
     userDataLog.write(
         userString + '\n' + response[2] + '\n' + "confidence = " + str(confidence) + "\n")
     userDataLog.close()
     print("處理資料回答花費時間：" + str(datetime.datetime.now() - time1))
-
-    time1 = datetime.datetime.now()
-    try:
-        line_bot_api.reply_message(event.reply_token, send)
-    except linebot.exceptions.LineBotApiError as e:
-        print(e.status_code)
-        print(e.error.message)
-        print(e.error.details)
-        line_bot_api.reply_message(
-            event.reply_token, TextSendMessage(text='啊哦！關於這個問題或許我們遇到了點麻煩。'))
-    print("回覆使用者花費時間：" + str(datetime.datetime.now() - time1))
     print("整體運作時間：" + str(datetime.datetime.now() - totalTime))
 
 
