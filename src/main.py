@@ -114,31 +114,16 @@ def handle_message(event):
     # 透過分割後的response得到list中第0個元素即為confidence
     confidence = float(response[0])
     print("邏輯運作時間：" + str(datetime.datetime.now() - time1))
-
-    time1 = datetime.datetime.now()
     # 先回找到的答案在判斷要補輸出什麼
-    send = TextSendMessage(text=response[2])
-    print('Bot: ' + response[2])
-    try:
-        line_bot_api.reply_message(event.reply_token, send)
-        line_bot_api.reply_message(event.reply_token, "hello")
-    except linebot.exceptions.LineBotApiError as e:
-        print(e.status_code)
-        print(e.error.message)
-        print(e.error.details)
-        line_bot_api.reply_message(
-            event.reply_token, TextSendMessage(text='啊哦！關於這個問題或許我們遇到了點麻煩。'))
-    print("回覆使用者花費時間：" + str(datetime.datetime.now() - time1))
+    send = []
+    send.append(TextSendMessage(text=response[2]))
 
     time1 = datetime.datetime.now()
 
     # 判斷confidence，若其小於0.3則代表現在的response存在問題集合
     # 若其大於等於0.3則代表response可直接處理
     if confidence < 0.3:
-        line_bot_api.push_message(
-            event.source.user_id,
-            TextSendMessage(text='以上回答可能無法滿足您的需求')
-        )
+        send.append(TextSendMessage(text='以上回答可能無法滿足您的需求'))
         # 將response中list以\n進行分割得到型態為list的response_list（先不處理空白）
         response_list = response[3].split('\n')
         # pop掉最後一個空元素
@@ -149,7 +134,7 @@ def handle_message(event):
         # 因空的list也算有1個元素
         if length > 1:
             # 填入選單
-            line_bot_api.push_message(event.source.user_id, get_linebot_menu(response_list))
+            send.append(get_linebot_menu(response_list))
             print('Bot: （因項目過多，送出選單）')
         else:
             # 下面是處理資料庫中找不到相關選項時的回應
@@ -158,12 +143,23 @@ def handle_message(event):
                 original_content_url='https://raw.githubusercontent.com/NatLee/test/master/SMILE.jpg',
                 preview_image_url='https://raw.githubusercontent.com/NatLee/test/master/SMILE.jpg'
             )
-            line_bot_api.push_message(event.source.user_id, image_message)
+            send.append(image_message)
 
-        line_bot_api.push_message(event.source.user_id, TextSendMessage(
+        send.append(TextSendMessage(
             text='或許您可以嘗試\n' +
             'https://www.google.com.tw/search?q=' + event.message.text)
         )
+
+    time1 = datetime.datetime.now()
+    try:
+        line_bot_api.reply_message(event.reply_token, send)
+    except linebot.exceptions.LineBotApiError as e:
+        print(e.status_code)
+        print(e.error.message)
+        print(e.error.details)
+        line_bot_api.reply_message(
+            event.reply_token, TextSendMessage(text='啊哦！關於這個問題或許我們遇到了點麻煩。'))
+    print("回覆使用者花費時間：" + str(datetime.datetime.now() - time1))
 
     userDataLog = open("userdata.log", mode='a', encoding='utf-8')
     userDataLog.write(
@@ -174,4 +170,5 @@ def handle_message(event):
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    # app.run(host='0.0.0.0')
+    print(chatbot.get_response("一卡通"))
