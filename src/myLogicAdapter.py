@@ -51,20 +51,16 @@ class MyLogicAdapter(LogicAdapter):
         self.all_statement_list = ''
         # Find the closest matching known statement
         timeTemp = T.time()
-        timeCount = 0
         for statement in statement_list:
             confidence = self.compare_statements(input_statement, statement)
             if confidence < 0.3:
-                cTime = T.time()
                 if compare(input_statement.text, statement.text) == 1:
                     self.all_statement_list += statement.text.replace(' ', '')
                     self.all_statement_list += '\n'
-                timeCount += (T.time() - cTime)
 
             if confidence > closest_match.confidence:
                 statement.confidence = confidence
                 closest_match = statement
-        print("信心水準<0.3的compare時間：" + str(timeCount))
         print("尋找最佳回答時間：" + str(T.time() - timeTemp))
         return closest_match
 
