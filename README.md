@@ -15,3 +15,5 @@ yee
 `db.getSiblingDB('admin').runCommand( { setParameter: 1, failIndexKeyTooLong: false } )`
 
 `docker exec -it ID bash`
+
+`curl -ik -X POST "https://graph.facebook.com/v2.6/me/subscribed_apps?access_token=***REMOVED***"`
