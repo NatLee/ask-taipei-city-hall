@@ -11,7 +11,6 @@ import linebot.exceptions
 import config
 import sys
 
-
 #sys.stderr = open('server.log', 'a')
 
 app = Flask(__name__)
@@ -74,9 +73,7 @@ def handle_message(event):
     try:
         line_bot_api.reply_message(event.reply_token, send)
     except linebot.exceptions.LineBotApiError as e:
-        print(e.status_code)
-        print(e.error.message)
-        print(e.error.details)
+        print(e)
         line_bot_api.reply_message(
             event.reply_token, TextSendMessage(text='啊哦！關於這個問題或許我們遇到了點麻煩。'))
     setUserLog(userString, response, confidence)
@@ -84,4 +81,4 @@ def handle_message(event):
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', threaded=True)

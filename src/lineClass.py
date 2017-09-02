@@ -76,8 +76,8 @@ class LineClass:
             )
         ))
 
-        def get_nofind_message():
-            self.sned.append(ImageSendMessage(
-                original_content_url='https://raw.githubusercontent.com/NatLee/test/master/SMILE.jpg',
-                preview_image_url='https://raw.githubusercontent.com/NatLee/test/master/SMILE.jpg'
-            ))
+    def get_nofind_message(self):
+        self.send.append(ImageSendMessage(
+            original_content_url='https://raw.githubusercontent.com/NatLee/test/master/SMILE.jpg',
+            preview_image_url='https://raw.githubusercontent.com/NatLee/test/master/SMILE.jpg'
+    ))
