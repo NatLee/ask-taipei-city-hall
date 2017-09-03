@@ -17,7 +17,6 @@ class FbClass:
             self.low_confidence_event(user_id)
 
     def low_confidence_event(self, user_id):
-        self.bot.send_text_message(user_id, "以上回答可能無法滿足您的需求")
         # 將response中list以\n進行分割得到型態為list的response_list（先不處理空白）
         response_list = self.response[3].split('\n')
         # pop掉最後一個空元素
@@ -37,7 +36,7 @@ class FbClass:
 
         self.bot.send_text_message(
             user_id,
-            '或許您可以嘗試\n' +
+            '以上回答可能無法滿足您的需求，或許可以嘗試\n' +
             'https://www.google.com.tw/search?q=' + self.input_message
         )
 
