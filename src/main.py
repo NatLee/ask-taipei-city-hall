@@ -2,13 +2,13 @@
 from flask import Flask, request, abort
 from linebot.models import TextMessage, MessageEvent, TextSendMessage
 
-#import sys
+import sys
 
 import getLine
 
 from lineBotBuild import ( line_bot_api1,handler1,line_bot_api2,handler2 )
 
-#sys.stderr = open('server.log', 'a')
+sys.stderr = open('server.log', 'a')
 app = Flask(__name__)
 
 @app.route('/')
