@@ -9,5 +9,3 @@ data/
 __pycache__/
 *.log
 *.pyc
-config.py
-src/config.py
