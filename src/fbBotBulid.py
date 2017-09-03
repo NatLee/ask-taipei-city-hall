@@ -4,8 +4,6 @@ from chatbot import chatbot
 import fbClass
 import config
 
-# fbBot = Bot(config.ACCESS_TOKEN)
-
 
 def fbResponse():
     if request.method == 'GET':

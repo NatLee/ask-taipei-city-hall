@@ -1,16 +1,17 @@
-from pymessenger.bot import Bot
+# coding=utf-8
+from pymessager.message import Messager
 import config
 
 
 class FbClass:
     def __init__(self, confidence, response, input_message):
-        self.bot = Bot(config.ACCESS_TOKEN)
+        self.bot = Messager(config.ACCESS_TOKEN)
         self.confidence = confidence
         self.response = response
         self.input_message = input_message
 
     def get_fb_format(self, user_id):
-        self.bot.send_text_message(user_id, self.response[2])
+        self.bot.send_text(user_id, self.response[2])
         # 判斷confidence，若其小於0.3則代表現在的response存在問題集合
         # 若其大於等於0.3則代表response可直接處理
         if self.confidence < 0.3:
@@ -34,7 +35,7 @@ class FbClass:
             self.get_nofind_message(user_id)
             print('資料庫中找不到任何相關的選項')
 
-        self.bot.send_text_message(
+        self.bot.send_text(
             user_id,
             '以上回答可能無法滿足您的需求，或許可以嘗試\n' +
             'https://www.google.com.tw/search?q=' + self.input_message
@@ -48,19 +49,20 @@ class FbClass:
             length = 3
         # 只要有相關問題則append 最多3個到選單上
         for i in range(length):
-            actions.append(
-                {
-                    "type": "postback",
-                    # 將空白取代後取前20個字填入（在此才將空白取代因最多也只有三項）
-                    "title": str(response_list[i].replace(' ', '')[0:19]),
-                    "payload": str(response_list[i].replace(' ', '')[0:19])
-                }
+            actions.append(ActionButton(
+                    ButtonType.POSTBACK,
+                    str(response_list[i].replace(' ', '')[0:19]),
+                    str(response_list[i].replace(' ', '')[0:999])
+                    )
             )
-
-        print('選單的選項數: ' + str(len(actions)))
-        self.bot.send_button_message(
+        self.bot.send_image(
             user_id,
-            "或許下面可能有您想問的問題",
+            'https://raw.githubusercontent.com/NatLee/test/master/PASSION.jpg'
+        )
+        print('選單的選項數: ' + str(len(actions)))
+        self.bot.send_buttons(
+            user_id,
+            '或許下面可能有您想問的問題',
             actions
         )
 
