@@ -1,11 +1,8 @@
 # coding: utf-8
 from flask import Flask, request, abort
 from linebot.models import TextMessage, MessageEvent, TextSendMessage
-
 import sys
-
 import getLine
-
 from lineBotBuild import ( line_bot_api1,handler1,line_bot_api2,handler2 )
 
 sys.stderr = open('server.log', 'a')
@@ -14,12 +11,10 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     return "<p>Hello YEE!</p>"
-
 @app.route("/callback1", methods=['POST'])
 def callback1():
     getLine.getCallback(app, handler1)
     return 'OK_1'
-
 @app.route("/callback2", methods=['POST'])
 def callback2():
     getLine.getCallback(app, handler2)
@@ -27,12 +22,11 @@ def callback2():
 
 @handler1.add(MessageEvent, message=TextMessage)
 def handle_message1(event):
-    print("--------------BOT 1--------------")
+    print("--------------LineBot 1--------------")
     getLine.getHandleMessage(line_bot_api1,event)
-
 @handler2.add(MessageEvent, message=TextMessage)
 def handle_message2(event):
-    print("--------------BOT 2--------------")
+    print("--------------LineBot 2--------------")
     getLine.getHandleMessage(line_bot_api2,event)
 
 if __name__ == "__main__":
