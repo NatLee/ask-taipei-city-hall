@@ -40,6 +40,10 @@ def getTextMessage():
                 recipient_id = x['sender']['id']
                 if x['message'].get('text'):
                     text = x['message']['text']
+            elif x.get('postback'):
+                recipient_id = x['sender']['id']
+                if x['postback'].get('payload'):
+                    text = x['postback']['payload']
             else:
                 pass
     return text, recipient_id  # 抓不到就回傳空字串
