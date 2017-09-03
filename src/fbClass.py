@@ -1,5 +1,9 @@
 # coding=utf-8
-from pymessager.message import Messager
+from pymessager.message import (
+    Messager,
+    ActionButton,
+    ButtonType
+)
 import config
 
 
@@ -51,10 +55,11 @@ class FbClass:
         for i in range(length):
             actions.append(ActionButton(
                     ButtonType.POSTBACK,
-                    str(response_list[i].replace(' ', '')[0:19]),
-                    str(response_list[i].replace(' ', '')[0:999])
+                    title=str(response_list[i].replace(' ', '')[0:19]),
+                    payload=str(response_list[i].replace(' ', '')[0:999])
                     )
             )
+            print(str(actions[0].payload))
         self.bot.send_image(
             user_id,
             'https://raw.githubusercontent.com/NatLee/test/master/PASSION.jpg'
