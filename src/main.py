@@ -4,7 +4,7 @@ from lineBotBuild import (handler1, handler2)
 import fbBotBulid as fb
 import getLine
 import sys
-#sys.stderr = open('server.log', 'a')
+sys.stderr = open('server.log', 'a')
 app = Flask(__name__)
 
 
@@ -31,4 +31,4 @@ def callback2():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', threaded=True, debug=True)
+    app.run(host='0.0.0.0', threaded=True)

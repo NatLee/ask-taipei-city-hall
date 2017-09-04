@@ -110,7 +110,7 @@ class QuickReply:
             reply_dict[TITLE_FIELD] = self.title
         if self.image_url:
             reply_dict[IMAGE_FIELD] = self.image_url
-        print(reply_dict)
+        #print(reply_dict)
         return reply_dict
 
 
@@ -206,12 +206,12 @@ class Messager(object):
         post_message_url = URL_BASE + "messages?access_token={token}".format(
             token=self.access_token)
         response_message = json.dumps(message_data)
-        print(response_message)
+        #print(response_message)
         req = requests.post(post_message_url,
                             headers={"Content-Type": "application/json"},
                             data=response_message)
         fmt = "[{status}/{reason}/{text}] Reply to {recipient}: {content}"
-        print(fmt.format(status=req.status_code,
+        #print(fmt.format(status=req.status_code,
                          reason=req.reason,
                          text=req.text,
                          recipient=message_data[RECIPIENT_FIELD],
