@@ -26,7 +26,6 @@ class LineClass:
         return self.send
 
     def low_confidence_event(self):
-        self.send.append(TextSendMessage(text='以上回答可能無法滿足您的需求'))
         # 將response中list以\n進行分割得到型態為list的response_list（先不處理空白）
         response_list = self.response[3].split('\n')
         # pop掉最後一個空元素
@@ -45,7 +44,7 @@ class LineClass:
             print('資料庫中找不到任何相關的選項')
 
         self.send.append(TextSendMessage(
-            text='或許您可以嘗試\n' +
+            text='以上回答可能無法滿足您的需求，或許可以嘗試\n' +
             'https://www.google.com.tw/search?q=' + self.input_message)
         )
 

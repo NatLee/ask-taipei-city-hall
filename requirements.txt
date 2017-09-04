@@ -2,3 +2,4 @@ Flask
 chatterbot
 line-bot-sdk
 numpy
+PyMessager

@@ -1,14 +1,14 @@
 # coding: utf-8
 
-from flask import Flask, request, abort
-from linebot import LineBotApi, WebhookHandler
-from linebot.models import TextMessage, MessageEvent, TextSendMessage
+from flask import request, abort
+from linebot.models import TextSendMessage
 
 from chatbot import chatbot
 
 import linebot.exceptions
 import time as T
 import lineClass
+
 
 def getSignAndReq(app):
         # get X-Line-Signature header value
@@ -18,15 +18,17 @@ def getSignAndReq(app):
         app.logger.info("Request body: " + body)
         return signature, body
 
+
 def getHandler(handler, body,  signature):
     try:
         handler.handle(body, signature)
     except linebot.exceptions.InvalidSignatureError:
         abort(400)
 
+
 def getCallback(app, handler):
         signature, body = getSignAndReq(app)
-        getHandler(handler,body, signature)
+        getHandler(handler, body, signature)
 
 
 def setUserLog(userString, response, confidence):
@@ -34,6 +36,7 @@ def setUserLog(userString, response, confidence):
     userDataLog.write(
         userString + '\n' + response[2] + '\n' + "confidence = " + str(confidence) + "\n")
     userDataLog.close()
+
 
 def getUserSession(line_bot_api, event):
     try:
@@ -45,7 +48,8 @@ def getUserSession(line_bot_api, event):
     print(userString)
     return userString
 
-def getHandleMessage(line_bot_api,event):
+
+def getHandleMessage(line_bot_api, event):
         # 抓出使用者名字、ID跟訊息
         timeTemp = T.time()
         userString = getUserSession(line_bot_api, event)

@@ -16,7 +16,10 @@ def compare(input_statement, statement):
     for i in range(len(input_statement)):
         if temp[i] != 0:
             count += 1
-    confidence = (count / len(input_statement))
+    try:
+        confidence = (count / len(input_statement))
+    except:
+        confidence = 0
     return confidence
 
 
