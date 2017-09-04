@@ -9,8 +9,9 @@ def fbResponse():
     if request.method == 'GET':
         return helloTokenFB()
     if request.method == 'POST':
+        print("--------------FacebookBot--------------")
         text, user_id = getTextMessage()  # 這行可以得到使用者傳入的文字
-        print(text)
+        #print(text)
         response = str(chatbot.get_response(text)).split('_')
         # 透過分割後的response得到list中第0個元素即為confidence
         confidence = float(response[0])
@@ -30,7 +31,7 @@ def getTextMessage():
     text = ''
     recipient_id = ''
     output = request.get_json()
-    print(output)
+    #print(output)
     for event in output['entry']:
         messaging = event['messaging']
         for x in messaging:

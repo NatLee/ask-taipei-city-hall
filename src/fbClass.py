@@ -1,5 +1,5 @@
 # coding=utf-8
-from pymessager.message import (
+from fbMessageAPI import (
     Messager,
     ActionButton,
     ButtonType
@@ -22,6 +22,7 @@ class FbClass:
             self.low_confidence_event(user_id)
 
     def low_confidence_event(self, user_id):
+        actions = []
         # 將response中list以\n進行分割得到型態為list的response_list（先不處理空白）
         response_list = self.response[3].split('\n')
         # pop掉最後一個空元素
@@ -39,10 +40,18 @@ class FbClass:
             self.get_nofind_message(user_id)
             print('資料庫中找不到任何相關的選項')
 
-        self.bot.send_text(
+        googleSearch = str('https://www.google.com.tw/search?q=' + self.input_message)
+
+        actions.append(ActionButton(
+                ButtonType.WEB_URL,
+                self.input_message,
+                googleSearch
+                )
+        )
+        self.bot.send_buttons(
             user_id,
-            '以上回答可能無法滿足您的需求，或許可以嘗試\n' +
-            'https://www.google.com.tw/search?q=' + self.input_message
+            '以上回答可能無法滿足您的需求，可以嘗試以下按鈕',
+            actions
         )
 
     def get_menu(self, response_list, user_id):
@@ -59,7 +68,7 @@ class FbClass:
                     payload=str(response_list[i].replace(' ', '')[0:999])
                     )
             )
-            print(str(actions[0].payload))
+            #print(str(actions[0].payload))
         self.bot.send_image(
             user_id,
             'https://raw.githubusercontent.com/NatLee/test/master/PASSION.jpg'
