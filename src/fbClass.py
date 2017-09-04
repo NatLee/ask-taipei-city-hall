@@ -4,8 +4,6 @@ from fbMessageAPI import (
     ActionButton,
     ButtonType
 )
-import requests
-import json
 import config
 
 
@@ -88,18 +86,6 @@ class FbClass:
             user_id,
             'https://raw.githubusercontent.com/NatLee/test/master/SMILE.jpg'
         )
-
-
-    def getUserProfile(self, user_id):
-        return requests.get('https://graph.facebook.com/v2.6/' + user_id + '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + config.ACCESS_TOKEN).json()
-
-
-    def getUserName(self, jsonData):
-        name = ''
-        if jsonData not None:
-            name = str(jsonData['first_name'] + jsonData['last_name'])
-        return name
-
 
     def setUserLog(userString, response, confidence):
         userDataLog = open("userdataFB.log", mode='a', encoding='utf-8')
