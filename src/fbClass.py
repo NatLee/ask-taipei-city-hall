@@ -4,6 +4,8 @@ from fbMessageAPI import (
     ActionButton,
     ButtonType
 )
+import requests
+import json
 import config
 
 
@@ -20,6 +22,7 @@ class FbClass:
         # 若其大於等於0.3則代表response可直接處理
         if self.confidence < 0.3:
             self.low_confidence_event(user_id)
+
 
     def low_confidence_event(self, user_id):
         actions = []
@@ -85,3 +88,21 @@ class FbClass:
             user_id,
             'https://raw.githubusercontent.com/NatLee/test/master/SMILE.jpg'
         )
+
+
+    def getUserProfile(self, user_id):
+        return requests.get('https://graph.facebook.com/v2.6/' + user_id + '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + config.ACCESS_TOKEN).json()
+
+
+    def getUserName(self, jsonData):
+        name = ''
+        if jsonData not None:
+            name = str(jsonData['first_name'] + jsonData['last_name'])
+        return name
+
+
+    def setUserLog(userString, response, confidence):
+        userDataLog = open("userdataFB.log", mode='a', encoding='utf-8')
+        userDataLog.write(
+            userString + '\n' + response[2] + '\n' + "confidence = " + str(confidence) + "\n")
+        userDataLog.close()

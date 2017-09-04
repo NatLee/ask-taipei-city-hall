@@ -32,7 +32,7 @@ def getCallback(app, handler):
 
 
 def setUserLog(userString, response, confidence):
-    userDataLog = open("userdata.log", mode='a', encoding='utf-8')
+    userDataLog = open("userdataLine.log", mode='a', encoding='utf-8')
     userDataLog.write(
         userString + '\n' + response[2] + '\n' + "confidence = " + str(confidence) + "\n")
     userDataLog.close()

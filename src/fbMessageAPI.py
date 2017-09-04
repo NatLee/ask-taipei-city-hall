@@ -211,8 +211,10 @@ class Messager(object):
                             headers={"Content-Type": "application/json"},
                             data=response_message)
         fmt = "[{status}/{reason}/{text}] Reply to {recipient}: {content}"
-        #print(fmt.format(status=req.status_code,
+        '''
+        print(fmt.format(status=req.status_code,
                          reason=req.reason,
                          text=req.text,
                          recipient=message_data[RECIPIENT_FIELD],
                          content=message_data[MESSAGE_FIELD]))
+        '''

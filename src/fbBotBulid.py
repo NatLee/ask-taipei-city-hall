@@ -16,7 +16,9 @@ def fbResponse():
         # 透過分割後的response得到list中第0個元素即為confidence
         confidence = float(response[0])
         fbclass = fbClass.FbClass(confidence, response, text)
+        userString = fbclass.getUserName + ': ' + text
         fbclass.get_fb_format(user_id)
+        fbclass.setUserLog(userString, response, confidence)
         return "Success"
 
 
