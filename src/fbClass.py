@@ -21,7 +21,6 @@ class FbClass:
         if self.confidence < 0.3:
             self.low_confidence_event(user_id)
 
-
     def low_confidence_event(self, user_id):
         actions = []
         # 將response中list以\n進行分割得到型態為list的response_list（先不處理空白）
@@ -69,7 +68,7 @@ class FbClass:
                     payload=str(response_list[i].replace(' ', '')[0:999])
                     )
             )
-            #print(str(actions[0].payload))
+            # print(str(actions[0].payload))
         self.bot.send_image(
             user_id,
             'https://raw.githubusercontent.com/NatLee/test/master/PASSION.jpg'
@@ -87,7 +86,7 @@ class FbClass:
             'https://raw.githubusercontent.com/NatLee/test/master/SMILE.jpg'
         )
 
-    def setUserLog(userString, response, confidence):
+    def setUserLog(self, userString, response, confidence):
         userDataLog = open("userdataFB.log", mode='a', encoding='utf-8')
         userDataLog.write(
             userString + '\n' + response[2] + '\n' + "confidence = " + str(confidence) + "\n")

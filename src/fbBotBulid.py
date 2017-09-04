@@ -16,7 +16,7 @@ def fbResponse():
         #print(text)
 
         jsonData = requests.get('https://graph.facebook.com/v2.6/' + user_id + '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + config.ACCESS_TOKEN).json()
-        userName = str( jsonData['last_name'] + jsonData['first_name'])
+        userName = str(jsonData['last_name'] + jsonData['first_name'])
 
         response = str(chatbot.get_response(text)).split('_')
         # 透過分割後的response得到list中第0個元素即為confidence
@@ -40,7 +40,7 @@ def getTextMessage():
     text = ''
     recipient_id = ''
     output = request.get_json()
-    #print(output)
+    print(output)
     for event in output['entry']:
         messaging = event['messaging']
         for x in messaging:
