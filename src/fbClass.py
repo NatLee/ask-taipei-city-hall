@@ -68,7 +68,7 @@ class FbClass:
                     payload=str(response_list[i].replace(' ', '')[0:999])
                     )
             )
-            #print(str(actions[0].payload))
+            # print(str(actions[0].payload))
         self.bot.send_image(
             user_id,
             'https://raw.githubusercontent.com/NatLee/test/master/PASSION.jpg'
@@ -85,3 +85,9 @@ class FbClass:
             user_id,
             'https://raw.githubusercontent.com/NatLee/test/master/SMILE.jpg'
         )
+
+    def setUserLog(self, userString, response, confidence):
+        userDataLog = open("userdataFB.log", mode='a', encoding='utf-8')
+        userDataLog.write(
+            userString + '\n' + response[2] + '\n' + "confidence = " + str(confidence) + "\n")
+        userDataLog.close()
