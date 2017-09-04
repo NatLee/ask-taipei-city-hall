@@ -1,5 +1,5 @@
 # coding=utf-8
-from pymessager.message import (
+from fbMessageAPI import (
     Messager,
     ActionButton,
     ButtonType
