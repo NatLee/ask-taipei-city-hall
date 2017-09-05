@@ -41,17 +41,12 @@ def getTextMessage():
     recipient_id = ''
     output = request.get_json()
     print(output)
-    for event in output['entry']:
-        messaging = event['messaging']
-        for x in messaging:
-            if x.get('message'):
-                recipient_id = x['sender']['id']
-                if x['message'].get('text'):
-                    text = x['message']['text']
-            elif x.get('postback'):
-                recipient_id = x['sender']['id']
-                if x['postback'].get('payload'):
-                    text = x['postback']['payload']
-            else:
-                pass
+    messaging = output['entry'][0]['messaging'][0]
+    recipient_id = messaging['sender']['id']
+    if(messaging.get('message')):
+        text = messaging['message']['text']
+    elif(messaging.get('postback')):
+         text = messaging['postback']['payload']
+    else:
+        pass
     return text, recipient_id  # 抓不到就回傳空字串
