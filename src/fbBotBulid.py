@@ -13,9 +13,9 @@ def fbResponse():
     if request.method == 'POST':
         print("--------------FacebookBot--------------")
         text, user_id = getTextMessage()  # 這行可以得到使用者傳入的文字
-        #print(text)
-
-        jsonData = requests.get('https://graph.facebook.com/v2.6/' + user_id + '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + config.ACCESS_TOKEN).json()
+        send_typing_on(user_id)
+        jsonData = requests.get('https://graph.facebook.com/v2.6/' + user_id +
+                                '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + config.ACCESS_TOKEN).json()
         userName = str(jsonData['last_name'] + jsonData['first_name'])
 
         response = str(chatbot.get_response(text)).split('_')
@@ -41,17 +41,22 @@ def getTextMessage():
     recipient_id = ''
     output = request.get_json()
     print(output)
-    for event in output['entry']:
-        messaging = event['messaging']
-        for x in messaging:
-            if x.get('message'):
-                recipient_id = x['sender']['id']
-                if x['message'].get('text'):
-                    text = x['message']['text']
-            elif x.get('postback'):
-                recipient_id = x['sender']['id']
-                if x['postback'].get('payload'):
-                    text = x['postback']['payload']
-            else:
-                pass
+    messaging = output['entry'][0]['messaging'][0]
+    recipient_id = messaging['sender']['id']
+    if(messaging.get('message') and messaging['message'].get('text')):
+        text = messaging['message']['text']
+    elif(messaging.get('postback') and messaging['postback'].get('payload')):
+        text = messaging['postback']['payload']
+    else:
+        pass
     return text, recipient_id  # 抓不到就回傳空字串
+
+
+def send_typing_on(to):
+    post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token={token}'.format(token=config.ACCESS_TOKEN)
+    response_message = json.dumps({"recipient": {"id": to},
+                                   "sender_action": "typing_on"})
+    req = requests.post(post_message_url,
+                        headers={"Content-Type": "application/json"},
+                        data=response_message)
+    print("[{}] Reply to {}", req, to)
