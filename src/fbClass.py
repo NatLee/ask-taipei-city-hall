@@ -15,11 +15,12 @@ class FbClass:
         self.input_message = input_message
 
     def get_fb_format(self, user_id):
-        self.bot.send_text(user_id, self.response[2])
         # 判斷confidence，若其小於0.3則代表現在的response存在問題集合
         # 若其大於等於0.3則代表response可直接處理
         if self.confidence < 0.3:
             self.low_confidence_event(user_id)
+        else:
+            self.bot.send_text(user_id, self.response[2])
 
     def low_confidence_event(self, user_id):
         actions = []
@@ -40,17 +41,18 @@ class FbClass:
             self.get_nofind_message(user_id)
             print('資料庫中找不到任何相關的選項')
 
-        googleSearch = str('https://www.google.com.tw/search?q=' + self.input_message)
+        googleSearch = str(
+            'https://www.google.com.tw/search?q=' + self.input_message)
 
         actions.append(ActionButton(
-                ButtonType.WEB_URL,
-                self.input_message,
-                googleSearch
-                )
+            ButtonType.WEB_URL,
+            self.input_message,
+            googleSearch
+        )
         )
         self.bot.send_buttons(
             user_id,
-            '以上回答可能無法滿足您的需求，可以嘗試以下按鈕',
+            '對不起我不太懂您的問題>_<，所以我幫你餵了估狗，希望對您有幫助',
             actions
         )
 
@@ -63,10 +65,10 @@ class FbClass:
         # 只要有相關問題則append 最多3個到選單上
         for i in range(length):
             actions.append(ActionButton(
-                    ButtonType.POSTBACK,
-                    title=str(response_list[i].replace(' ', '')[0:19]),
-                    payload=str(response_list[i].replace(' ', '')[0:999])
-                    )
+                ButtonType.POSTBACK,
+                title=str(response_list[i].replace(' ', '')[0:19]),
+                payload=str(response_list[i].replace(' ', '')[0:999])
+            )
             )
             # print(str(actions[0].payload))
         self.bot.send_image(
