@@ -13,8 +13,7 @@ def fbResponse():
     if request.method == 'POST':
         print("--------------FacebookBot--------------")
         text, user_id = getTextMessage()  # 這行可以得到使用者傳入的文字
-        # print(text)
-        send_typing_on(id)
+        send_typing_on(user_id)
         jsonData = requests.get('https://graph.facebook.com/v2.6/' + user_id +
                                 '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + config.ACCESS_TOKEN).json()
         userName = str(jsonData['last_name'] + jsonData['first_name'])
