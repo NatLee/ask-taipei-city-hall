@@ -20,7 +20,7 @@ class Response():
         confidence = 0
         time2 = time.time()
         datas = self.loadData()
-        print("總花費時間：" + str(time.time() - time2) + "秒")
+        print("讀 JSON 花費時間：" + str(time.time() - time2) + "秒")
         for data in datas:
             con = SequenceMatcher(None, data["qu_new"], self.input).ratio()
             if confidence < 0.3:

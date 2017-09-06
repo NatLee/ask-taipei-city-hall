@@ -1,11 +1,11 @@
 # coding=utf-8
 from flask import request
-from chatbot import chatbot
 import fbClass
 import config
 import requests
 import json
 
+import responseLogic
 
 def fbResponse():
     if request.method == 'GET':
@@ -18,8 +18,11 @@ def fbResponse():
                                 '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + config.ACCESS_TOKEN).json()
         userName = str(jsonData['last_name'] + jsonData['first_name'])
 
-        response = str(chatbot.get_response(text)).split('_')
+        #response = str(chatbot.get_response(text)).split('_')
         # 透過分割後的response得到list中第0個元素即為confidence
+        res = responseLogic.Response(text)
+        response = res.get()
+
         confidence = float(response[0])
         fbclass = fbClass.FbClass(confidence, response, text)
         userString = userName + '_' + user_id + ': ' + text
