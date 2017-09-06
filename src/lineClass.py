@@ -18,7 +18,7 @@ class LineClass:
         self.send = []
 
     def get_line_format(self):
-        self.send.append(TextSendMessage(text=self.response[2]))
+        self.send.append(TextSendMessage(text=self.response[1]))
         # 判斷confidence，若其小於0.3則代表現在的response存在問題集合
         # 若其大於等於0.3則代表response可直接處理
         if self.confidence < 0.3:
@@ -26,10 +26,7 @@ class LineClass:
         return self.send
 
     def low_confidence_event(self):
-        # 將response中list以\n進行分割得到型態為list的response_list（先不處理空白）
-        response_list = self.response[3].split('\n')
-        # pop掉最後一個空元素
-        response_list.pop()
+        response_list = self.response[2]
         # 計算list大小
         length = len(response_list)
         # 判斷list大小，若大於1則進入填入選單判斷式
@@ -79,4 +76,4 @@ class LineClass:
         self.send.append(ImageSendMessage(
             original_content_url='https://raw.githubusercontent.com/NatLee/test/master/SMILE.jpg',
             preview_image_url='https://raw.githubusercontent.com/NatLee/test/master/SMILE.jpg'
-    ))
+        ))

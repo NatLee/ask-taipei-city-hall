@@ -33,7 +33,7 @@ def getCallback(app, handler):
 def setUserLog(userString, response, confidence):
     userDataLog = open("userdataLine.log", mode='a', encoding='utf-8')
     userDataLog.write(
-        userString + '\n' + response[2] + '\n' + "confidence = " + str(confidence) + "\n")
+        userString + '\n' + response[1] + '\n' + "confidence = " + str(confidence) + "\n")
     userDataLog.close()
 
 
@@ -53,8 +53,7 @@ def getHandleMessage(line_bot_api, event):
         timeTemp = T.time()
         userString = getUserSession(line_bot_api, event)
 
-        # 丟入使用者輸入的資料得到response並使用底線切割
-        # response = str(chatbot.get_response(event.message.text)).split('_')
+        # 丟入使用者輸入的資料得到response
         res = responseLogic.Response(event.message.text)
         response = res.get()
         confidence = float(response[0])

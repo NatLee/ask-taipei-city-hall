@@ -20,14 +20,11 @@ class FbClass:
         if self.confidence < 0.3:
             self.low_confidence_event(user_id)
         else:
-            self.bot.send_text(user_id, self.response[2])
+            self.bot.send_text(user_id, self.response[1])
 
     def low_confidence_event(self, user_id):
         actions = []
-        # 將response中list以\n進行分割得到型態為list的response_list（先不處理空白）
-        response_list = self.response[3].split('\n')
-        # pop掉最後一個空元素
-        response_list.pop()
+        response_list = self.response[2]
         # 計算list大小
         length = len(response_list)
         # 判斷list大小，若大於1則進入填入選單判斷式
@@ -68,8 +65,7 @@ class FbClass:
                 ButtonType.POSTBACK,
                 title=str(response_list[i].replace(' ', '')[0:19]),
                 payload=str(response_list[i].replace(' ', '')[0:999])
-            )
-            )
+            ))
             # print(str(actions[0].payload))
         self.bot.send_image(
             user_id,
@@ -91,5 +87,5 @@ class FbClass:
     def setUserLog(self, userString, response, confidence):
         userDataLog = open("userdataFB.log", mode='a', encoding='utf-8')
         userDataLog.write(
-            userString + '\n' + response[2] + '\n' + "confidence = " + str(confidence) + "\n")
+            userString + '\n' + response[1] + '\n' + "confidence = " + str(confidence) + "\n")
         userDataLog.close()
