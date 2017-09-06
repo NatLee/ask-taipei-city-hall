@@ -4,12 +4,12 @@ db_uri = "mongodb://140.118.155.181:27017/"
 db_name = "chatterbot-database2"
 
 # facebook
-#ACCESS_TOKEN = "***REMOVED***"
-#VERIFY_TOKEN = "***REMOVED***"
-
-# facebook test
 ACCESS_TOKEN = "***REMOVED***"
 VERIFY_TOKEN = "***REMOVED***"
+
+# facebook test
+#ACCESS_TOKEN = "***REMOVED***"
+#VERIFY_TOKEN = "***REMOVED***"
 
 # nat1
 #channel_access_token1 = '***REMOVED***'
