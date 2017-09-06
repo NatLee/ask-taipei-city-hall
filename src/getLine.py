@@ -3,8 +3,7 @@
 from flask import request, abort
 from linebot.models import TextSendMessage
 
-from chatbot import chatbot
-
+import responseLogic
 import linebot.exceptions
 import time as T
 import lineClass
@@ -55,8 +54,9 @@ def getHandleMessage(line_bot_api, event):
         userString = getUserSession(line_bot_api, event)
 
         # 丟入使用者輸入的資料得到response並使用底線切割
-        response = str(chatbot.get_response(event.message.text)).split('_')
-        # 透過分割後的response得到list中第0個元素即為confidence
+        # response = str(chatbot.get_response(event.message.text)).split('_')
+        res = responseLogic.Response(event.message.text)
+        response = res.get()
         confidence = float(response[0])
         lineclass = lineClass.LineClass(confidence, response, event.message.text)
         send = lineclass.get_line_format()
