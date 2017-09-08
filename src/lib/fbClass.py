@@ -1,5 +1,5 @@
 # coding=utf-8
-from fbMessageAPI import (
+from lib.fbMessageAPI import (
     Messager,
     ActionButton,
     ButtonType
@@ -8,23 +8,22 @@ import config
 
 
 class FbClass:
-    def __init__(self, confidence, response, input_message):
+    def __init__(self, directBack, response, input_message):
         self.bot = Messager(config.ACCESS_TOKEN)
-        self.confidence = confidence
+        self.directBack = directBack
         self.response = response
         self.input_message = input_message
 
     def get_fb_format(self, user_id):
         # 判斷confidence，若其小於0.3則代表現在的response存在問題集合
         # 若其大於等於0.3則代表response可直接處理
-        if self.confidence < 0.3:
-            self.low_confidence_event(user_id)
+        if self.directBack:
+            self.bot.send_text(user_id, self.response[0]["ans"])
         else:
-            self.bot.send_text(user_id, self.response[1])
+            self.low_confidence_event(user_id)
 
     def low_confidence_event(self, user_id):
-        actions = []
-        response_list = self.response[2]
+        response_list = self.response
         # 計算list大小
         length = len(response_list)
         # 判斷list大小，若大於1則進入填入選單判斷式
@@ -37,6 +36,37 @@ class FbClass:
             # 下面是處理資料庫中找不到相關選項時的回應
             self.get_nofind_message(user_id)
             print('資料庫中找不到任何相關的選項')
+
+        
+
+    def get_menu(self, response_list, user_id):
+        actions = []
+        length = len(response_list)
+        # 如果list長度超過3，則取前三個
+        if length > 3:
+            length = 3
+        # 只要有相關問題則append 最多3個到選單上
+        for i in range(length):
+            actions.append(ActionButton(
+                ButtonType.POSTBACK,
+                title=str(response_list[i]["qu_old"][0:19]),#[0:19]
+                payload=str(response_list[i]["qu_old"])
+            ))
+
+        print('選單的選項數: ' + str(len(actions)))
+        self.bot.send_buttons(
+            user_id,
+            '您是不是想問...?',
+            actions
+        )
+
+    def get_nofind_message(self, user_id):
+        actions = []
+
+        self.bot.send_image(
+            user_id,
+            'https://raw.githubusercontent.com/NatLee/test/master/SMILE.jpg'
+        )
 
         googleSearch = str(
             'https://www.google.com.tw/search?q=' + self.input_message)
@@ -53,39 +83,8 @@ class FbClass:
             actions
         )
 
-    def get_menu(self, response_list, user_id):
-        actions = []
-        length = len(response_list)
-        # 如果list長度超過3，則取前三個
-        if length > 3:
-            length = 3
-        # 只要有相關問題則append 最多3個到選單上
-        for i in range(length):
-            actions.append(ActionButton(
-                ButtonType.POSTBACK,
-                title=str(response_list[i].replace(' ', '')[0:19]),
-                payload=str(response_list[i].replace(' ', '')[0:999])
-            ))
-            # print(str(actions[0].payload))
-        self.bot.send_image(
-            user_id,
-            'https://raw.githubusercontent.com/NatLee/test/master/PASSION.jpg'
-        )
-        print('選單的選項數: ' + str(len(actions)))
-        self.bot.send_buttons(
-            user_id,
-            '或許下面可能有您想問的問題',
-            actions
-        )
-
-    def get_nofind_message(self, user_id):
-        self.bot.send_image(
-            user_id,
-            'https://raw.githubusercontent.com/NatLee/test/master/SMILE.jpg'
-        )
-
-    def setUserLog(self, userString, response, confidence):
+    def setUserLog(self, userString, response):
         userDataLog = open("userdataFB.log", mode='a', encoding='utf-8')
         userDataLog.write(
-            userString + '\n' + response[1] + '\n' + "confidence = " + str(confidence) + "\n")
+            userString + '\n' + response[0]["ans"] + '\n')
         userDataLog.close()

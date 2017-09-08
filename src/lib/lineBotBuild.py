@@ -2,7 +2,7 @@
 
 from linebot import LineBotApi, WebhookHandler
 from linebot.models import TextMessage, MessageEvent
-import getLine
+import lib.getLine as getLine
 import config
 
 line_bot_api1 = LineBotApi(config.channel_access_token1)

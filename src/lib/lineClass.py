@@ -11,22 +11,21 @@ from linebot.models import (
 
 class LineClass:
 
-    def __init__(self, confidence, response, input_message):
-        self.confidence = confidence
+    def __init__(self, directBack,  response, input_message):
+        self.directBack = directBack
         self.response = response
         self.input_message = input_message
         self.send = []
 
     def get_line_format(self):
-        self.send.append(TextSendMessage(text=self.response[1]))
-        # 判斷confidence，若其小於0.3則代表現在的response存在問題集合
-        # 若其大於等於0.3則代表response可直接處理
-        if self.confidence < 0.3:
+        if(self.directBack):
+            self.send.append(TextSendMessage(text=self.response[0]["ans"]))
+        else:
             self.low_confidence_event()
         return self.send
 
     def low_confidence_event(self):
-        response_list = self.response[2]
+        response_list = self.response
         # 計算list大小
         length = len(response_list)
         # 判斷list大小，若大於1則進入填入選單判斷式
@@ -39,24 +38,23 @@ class LineClass:
             # 下面是處理資料庫中找不到相關選項時的回應
             self.get_nofind_message()
             print('資料庫中找不到任何相關的選項')
-
-        self.send.append(TextSendMessage(
-            text='以上回答可能無法滿足您的需求，或許可以嘗試\n' +
-            'https://www.google.com.tw/search?q=' + self.input_message)
-        )
+            self.send.append(TextSendMessage(
+                text='對不起我不太懂您的問題>_<，所以我幫你餵了估狗，希望對您有幫助\n' +
+                'https://www.google.com.tw/search?q=' + self.input_message)
+            )
 
     def get_linebot_menu(self, response_list):
         actions = []
         length = len(response_list)
-        # 如果list長度超過3，則取前三個
-        if length > 3:
-            length = 3
+        # 如果list長度超過4，則取前4個 極限就是4個
+        if length > 4:
+            length = 4
         # 只要有相關問題則append 最多3個到選單上
         for i in range(length):
             actions.append(MessageTemplateAction(
                 # 將空白取代後取前20個字填入（在此才將空白取代因最多也只有三項）
-                label=str(response_list[i].replace(' ', '')[0:19]),
-                text=str(response_list[i].replace(' ', '')[0:19]),
+                label=str(response_list[i]["qu_old"][0:19]),
+                text=str(response_list[i]["qu_old"]),#[0:19]
             ))
 
         print('選單的選項數: ' + str(len(actions)))
@@ -66,8 +64,8 @@ class LineClass:
             alt_text='問題選單',
             template=ButtonsTemplate(
                 thumbnail_image_url='https://raw.githubusercontent.com/NatLee/test/master/PASSION.jpg',
-                title='發現其他問題',
-                text='或許下面可能有您想問的問題',
+                title='您是不是想問...?',
+                text='請選擇您想問的問題',
                 actions=actions,
             )
         ))
