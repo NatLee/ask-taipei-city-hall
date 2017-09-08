@@ -1,11 +1,12 @@
 # coding=utf-8
 from flask import request
 import lib.fbClass as fbClass
-import config 
-import requests 
+import config
+import requests
 import json
 
 import lib.responseLogic as responseLogic
+
 
 def fbResponse():
     if request.method == 'GET':
@@ -18,16 +19,15 @@ def fbResponse():
                                 '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + config.ACCESS_TOKEN).json()
         userName = str(jsonData['last_name'] + jsonData['first_name'])
 
-        #response = str(chatbot.get_response(text)).split('_')
         # 透過分割後的response得到list中第0個元素即為confidence
         res = responseLogic.Response(text)
         directBack, response = res.get()
 
-        fbclass = fbClass.FbClass(directBack, response, text)
+        fbclass = fbClass.FbClass(directBack, response, text, user_id)
         userString = userName + '_' + user_id + ': ' + text
         print(userString)
-        fbclass.get_fb_format(user_id)
-        fbclass.setUserLog(userString, response)
+        fbclass.get_fb_format()
+        setUserLog(userString, response)
         return "Success"
 
 
@@ -62,3 +62,10 @@ def send_typing_on(to):
                         headers={"Content-Type": "application/json"},
                         data=response_message)
     print("[{}] Reply to {}", req, to)
+
+
+def setUserLog(self, userString, response):
+    userDataLog = open("userdataFB.log", mode='a', encoding='utf-8')
+    userDataLog.write(
+        userString + '\n' + response[0]["ans"] + '\n')
+    userDataLog.close()

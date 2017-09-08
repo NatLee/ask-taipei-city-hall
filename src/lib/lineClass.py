@@ -18,7 +18,7 @@ class LineClass:
         self.send = []
 
     def get_line_format(self):
-        if(self.directBack):
+        if self.directBack:
             self.send.append(TextSendMessage(text=self.response[0]["ans"]))
         else:
             self.low_confidence_event()

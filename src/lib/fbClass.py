@@ -8,21 +8,20 @@ import config
 
 
 class FbClass:
-    def __init__(self, directBack, response, input_message):
+    def __init__(self, directBack, response, input_message, user_id):
         self.bot = Messager(config.ACCESS_TOKEN)
         self.directBack = directBack
         self.response = response
         self.input_message = input_message
+        self.user_id = user_id
 
-    def get_fb_format(self, user_id):
-        # 判斷confidence，若其小於0.3則代表現在的response存在問題集合
-        # 若其大於等於0.3則代表response可直接處理
+    def get_fb_format(self):
         if self.directBack:
-            self.bot.send_text(user_id, self.response[0]["ans"])
+            self.bot.send_text(self.user_id, self.response[0]["ans"])
         else:
-            self.low_confidence_event(user_id)
+            self.low_confidence_event(self.user_id)
 
-    def low_confidence_event(self, user_id):
+    def low_confidence_event(self):
         response_list = self.response
         # 計算list大小
         length = len(response_list)
@@ -30,19 +29,28 @@ class FbClass:
         # 因空的list也算有1個元素
         if length > 1:
             # 填入選單
-            self.get_menu(response_list, user_id)
+            self.get_menu(response_list)
             print('Bot: （因項目過多，送出選單）')
         else:
             # 下面是處理資料庫中找不到相關選項時的回應
-            self.get_nofind_message(user_id)
+            self.get_nofind_message()
             print('資料庫中找不到任何相關的選項')
+            self.bot.send_buttons(
+                self.user_id,
+                '對不起我不太懂您的問題>_<，所以我幫你餵了估狗，希望對您有幫助',
+                [ActionButton(
+                    ButtonType.WEB_URL,
+                    self.input_message,
+                    'https://www.google.com.tw/search?q=' + self.input_message
+                )]
+            )
 
-    def get_menu(self, response_list, user_id):
+    def get_menu(self, response_list):
         actions = []
         length = len(response_list)
         # 如果list長度超過3，則取前三個
-        if length > 3:
-            length = 3
+        if length > 4:
+            length = 4
         # 只要有相關問題則append 最多3個到選單上
         for i in range(length):
             actions.append(ActionButton(
@@ -53,36 +61,13 @@ class FbClass:
 
         print('選單的選項數: ' + str(len(actions)))
         self.bot.send_buttons(
-            user_id,
+            self.user_id,
             '您是不是想問...?',
             actions
         )
 
-    def get_nofind_message(self, user_id):
-        actions = []
-
+    def get_nofind_message(self):
         self.bot.send_image(
-            user_id,
+            self.user_id,
             'https://raw.githubusercontent.com/NatLee/test/master/SMILE.jpg'
         )
-
-        googleSearch = str(
-            'https://www.google.com.tw/search?q=' + self.input_message)
-
-        actions.append(ActionButton(
-            ButtonType.WEB_URL,
-            self.input_message,
-            googleSearch
-        )
-        )
-        self.bot.send_buttons(
-            user_id,
-            '對不起我不太懂您的問題>_<，所以我幫你餵了估狗，希望對您有幫助',
-            actions
-        )
-
-    def setUserLog(self, userString, response):
-        userDataLog = open("userdataFB.log", mode='a', encoding='utf-8')
-        userDataLog.write(
-            userString + '\n' + response[0]["ans"] + '\n')
-        userDataLog.close()
