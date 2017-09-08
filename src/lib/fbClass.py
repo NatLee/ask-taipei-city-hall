@@ -37,8 +37,6 @@ class FbClass:
             self.get_nofind_message(user_id)
             print('資料庫中找不到任何相關的選項')
 
-        
-
     def get_menu(self, response_list, user_id):
         actions = []
         length = len(response_list)
@@ -49,7 +47,7 @@ class FbClass:
         for i in range(length):
             actions.append(ActionButton(
                 ButtonType.POSTBACK,
-                title=str(response_list[i]["qu_old"][0:19]),#[0:19]
+                title=str(response_list[i]["qu_old"][0:19]),
                 payload=str(response_list[i]["qu_old"])
             ))
 
