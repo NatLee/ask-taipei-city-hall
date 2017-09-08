@@ -5,7 +5,7 @@ from lib.fbMessageAPI import (
     ButtonType
 )
 import config
-
+import lib.templateFunc
 
 class FbClass:
     def __init__(self, directBack, response, input_message, user_id):
@@ -23,16 +23,10 @@ class FbClass:
 
     def low_confidence_event(self):
         response_list = self.response
-        # 計算list大小
-        length = len(response_list)
-        # 判斷list大小，若大於1則進入填入選單判斷式
-        # 因空的list也算有1個元素
-        if length > 1:
-            # 填入選單
+        if len(response_list) > 1:
             self.get_menu(response_list)
             print('Bot: （因項目過多，送出選單）')
         else:
-            # 下面是處理資料庫中找不到相關選項時的回應
             self.get_nofind_message()
             print('資料庫中找不到任何相關的選項')
             self.bot.send_buttons(
@@ -46,19 +40,7 @@ class FbClass:
             )
 
     def get_menu(self, response_list):
-        actions = []
-        length = len(response_list)
-        # 如果list長度超過3，則取前三個
-        if length > 4:
-            length = 4
-        # 只要有相關問題則append 最多3個到選單上
-        for i in range(length):
-            actions.append(ActionButton(
-                ButtonType.POSTBACK,
-                title=str(response_list[i]["qu_old"][0:19]),
-                payload=str(response_list[i]["qu_old"])
-            ))
-
+        actions = menuAction('fb', response_list)
         print('選單的選項數: ' + str(len(actions)))
         self.bot.send_buttons(
             self.user_id,
