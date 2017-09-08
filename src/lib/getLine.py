@@ -9,25 +9,16 @@ import time as T
 import lib.lineClass as lineClass
 
 
-def getSignAndReq(app):
+def getLineReqCallback(app, handler):
     # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
     # get request body as text
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
-    return signature, body
-
-
-def getHandler(handler, body,  signature):
     try:
         handler.handle(body, signature)
     except linebot.exceptions.InvalidSignatureError:
         abort(400)
-
-
-def getCallback(app, handler):
-    signature, body = getSignAndReq(app)
-    getHandler(handler, body, signature)
 
 
 def setUserLog(userString, response):
