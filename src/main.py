@@ -1,10 +1,8 @@
 # coding: utf-8
 from flask import Flask
-#from lib.lineBotBuild import (handler1, handler2)
 import lib.fbBotBuild as fb
 import lib.lineBotBuild as line
-import sys
-#sys.stderr = open('server.log', 'a')
+
 app = Flask(__name__)
 
 

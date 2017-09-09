@@ -16,6 +16,7 @@ import config
 import logging
 import logging.config
 
+
 class botClass:
     def __init__(self, directBack, response, input_message, bot_type, user_id):
         self.directBack = directBack
@@ -41,18 +42,15 @@ class botClass:
     def low_confidence_event(self):
 
         logging.config.fileConfig('lib/logconfig.ini')
-        key = logging.getLogger('key')
 
         response_list = self.response
         google_url = "https://www.google.com.tw/search?q="
         if len(response_list) > 1:
             self.get_menu(response_list)
-            key.info('Bot: （因項目過多，送出選單）')
-            #print('Bot: （因項目過多，送出選單）')
+            logging.info('Bot: （因項目過多，送出選單）')
         else:
             self.get_nofind_message()
-            key.info('資料庫中找不到任何相關的選項')
-            #print('資料庫中找不到任何相關的選項')
+            logging.info('資料庫中找不到任何相關的選項')
             if self.bot_type is 'line':
                 self.send.append(TextSendMessage(
                     text='對不起我不太懂您的問題>_<，所以我幫你餵了估狗，希望對您有幫助\n' +
@@ -72,11 +70,9 @@ class botClass:
     def get_menu(self, response_list):
 
         logging.config.fileConfig('lib/logconfig.ini')
-        key = logging.getLogger('key')
 
         actions = self._menuAction(self.bot_type, response_list)
-        key.info('選單的選項數: ' + str(len(actions)))
-        #print('選單的選項數: ' + str(len(actions)))
+        logging.info('選單的選項數: ' + str(len(actions)))
         if self.bot_type is 'line':
             self.send.append(TemplateSendMessage(
                 alt_text='問題選單',

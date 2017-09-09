@@ -1,6 +1,5 @@
 # coding=utf-8
 from flask import request
-# import lib.fbClass as fbClass
 import config
 import requests
 import json
@@ -9,6 +8,7 @@ import lib.responseLogic as responseLogic
 
 import logging
 import logging.config
+
 
 def loggingFb(string):
     logging.config.fileConfig('lib/logconfig.ini')
@@ -20,8 +20,6 @@ def fbResponse():
     if request.method == 'GET':
         return helloTokenFB()
     if request.method == 'POST':
-        #print("--------------FacebookBot--------------")
-        loggingFb("--------------FacebookBot--------------")
         text, user_id = getTextMessage()  # 這行可以得到使用者傳入的文字
         send_typing_on(user_id)
         jsonData = requests.get('https://graph.facebook.com/v2.6/' + user_id +
@@ -34,9 +32,8 @@ def fbResponse():
 
         fbclass = botClass(directBack, response, text, "fb", user_id)
         userString = userName + '_' + user_id + ': ' + text
-        print(userString)
         fbclass.get_format()
-        setUserLog(userString, response)
+        loggingFb(userString + '\n' + response[0]["ans"] + '\n')
         return "Success"
 
 
@@ -51,7 +48,7 @@ def getTextMessage():
     text = ''
     recipient_id = ''
     output = request.get_json()
-    print(output)
+    # print(output)
     messaging = output['entry'][0]['messaging'][0]
     recipient_id = messaging['sender']['id']
     if(messaging.get('message') and messaging['message'].get('text')):
@@ -67,11 +64,6 @@ def send_typing_on(to):
     post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token={token}'.format(token=config.ACCESS_TOKEN)
     response_message = json.dumps({"recipient": {"id": to},
                                    "sender_action": "typing_on"})
-    req = requests.post(post_message_url,
-                        headers={"Content-Type": "application/json"},
-                        data=response_message)
-    print("[{}] Reply to {}", req, to)
-
-
-def setUserLog(userString, response):
-    loggingFb(userString + '\n' + response[0]["ans"] + '\n')
+    requests.post(post_message_url,
+                  headers={"Content-Type": "application/json"},
+                  data=response_message)

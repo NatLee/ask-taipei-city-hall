@@ -20,6 +20,7 @@ handler1 = WebhookHandler(config.channel_secret1)
 line_bot_api2 = LineBotApi(config.channel_access_token2)
 handler2 = WebhookHandler(config.channel_secret2)
 
+
 def loggingLine(string):
     logging.config.fileConfig('lib/logconfig.ini')
     line = logging.getLogger("line")
@@ -28,15 +29,13 @@ def loggingLine(string):
 
 @handler1.add(MessageEvent, message=TextMessage)
 def handle_message1(event):
-    #print("--------------LineBot 1--------------")
-    loggingLine("--------------LineBot 1--------------")
+    # loggingLine("--------------LineBot 1--------------")
     getHandleMessage(line_bot_api1, event)
 
 
 @handler2.add(MessageEvent, message=TextMessage)
 def handle_message2(event):
-    #print("--------------LineBot 2--------------")
-    loggingLine("--------------LineBot 2--------------")
+    # loggingLine("--------------LineBot 2--------------")
     getHandleMessage(line_bot_api2, event)
 
 
@@ -52,10 +51,6 @@ def getLineReqCallback(app, handler):
         abort(400)
 
 
-def setUserLog(userString, response):
-    loggingLine(userString + '\n' + response + '\n')
-
-
 def getUserSession(line_bot_api, event):
     try:
         profile = line_bot_api.get_profile(event.source.user_id)
@@ -63,7 +58,6 @@ def getUserSession(line_bot_api, event):
     except:
         userName = ''
     userString = userName + ': ' + event.message.text
-    print(userString)
     return userString
 
 
@@ -82,9 +76,9 @@ def getHandleMessage(line_bot_api, event):
     try:
         line_bot_api.reply_message(event.reply_token, send)
         # 找不到任何答案時 response是空的array
-        setUserLog(userString, response[0]["ans"])
+        loggingLine(userString + '\n' + response[0]["ans"] + '\n')
     except linebot.exceptions.LineBotApiError as e:
-        print(e)
+        logging.error(e)
         line_bot_api.reply_message(
             event.reply_token, TextSendMessage(text='啊哦！關於這個問題或許我們遇到了點麻煩。'))
 
