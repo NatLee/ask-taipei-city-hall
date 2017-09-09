@@ -20,13 +20,13 @@ def callback():
 
 @app.route("/callback1", methods=['POST'])
 def callback1():
-    getLine.getCallback(app, handler1)
+    getLine.getLineReqCallback(app, handler1)
     return 'OK_1'
 
 
 @app.route("/callback2", methods=['POST'])
 def callback2():
-    getLine.getCallback(app, handler2)
+    getLine.getLineReqCallback(app, handler2)
     return 'OK_2'
 
 
