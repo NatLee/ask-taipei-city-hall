@@ -7,7 +7,7 @@ from linebot.models import (
     TextSendMessage,
     ImageSendMessage
 )
-import lib.templateFunc import menuAction
+from lib.templateFunc import menuAction
 
 class LineClass:
 

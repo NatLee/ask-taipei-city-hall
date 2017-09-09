@@ -4,7 +4,7 @@ from lib.fbMessageAPI import (
     ActionButton,
     ButtonType
 )
-import lib.templateFunc import menuAction
+from lib.templateFunc import menuAction
 import config
 
 
