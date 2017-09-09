@@ -1,11 +1,14 @@
 # coding=utf-8
 from flask import request
-import lib.fbClass as fbClass
+# import lib.fbClass as fbClass
 import config
 import requests
 import json
-
+from lib.botClass import botClass
 import lib.responseLogic as responseLogic
+
+import logging
+import logging.config
 
 
 def fbResponse():
@@ -23,10 +26,10 @@ def fbResponse():
         res = responseLogic.Response(text)
         directBack, response = res.get()
 
-        fbclass = fbClass.FbClass(directBack, response, text, user_id)
+        fbclass = botClass(directBack, response, text, "fb", user_id)
         userString = userName + '_' + user_id + ': ' + text
         print(userString)
-        fbclass.get_fb_format()
+        fbclass.get_format()
         setUserLog(userString, response)
         return "Success"
 
@@ -64,8 +67,12 @@ def send_typing_on(to):
     print("[{}] Reply to {}", req, to)
 
 
-def setUserLog(self, userString, response):
+def setUserLog(userString, response):
+    '''
     userDataLog = open("userdataFB.log", mode='a', encoding='utf-8')
-    userDataLog.write(
-        userString + '\n' + response[0]["ans"] + '\n')
+    userDataLog.write(userString + '\n' + response[0]["ans"] + '\n')
     userDataLog.close()
+    '''
+    logging.config.fileConfig('lib/logconfig.ini')
+    fb = logging.getLogger("fb")
+    fb.info(userString + '\n' + response[0]["ans"] + '\n')
