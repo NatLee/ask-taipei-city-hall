@@ -7,6 +7,9 @@ import json
 from lib.botClass import botClass
 import lib.responseLogic as responseLogic
 
+import logging
+import logging.config
+
 
 def fbResponse():
     if request.method == 'GET':
@@ -65,7 +68,10 @@ def send_typing_on(to):
 
 
 def setUserLog(userString, response):
+    '''
     userDataLog = open("userdataFB.log", mode='a', encoding='utf-8')
-    userDataLog.write(
-        userString + '\n' + response[0]["ans"] + '\n')
+    userDataLog.write(userString + '\n' + response[0]["ans"] + '\n')
     userDataLog.close()
+    '''
+    logging.config.fileConfig('logconfig.ini')
+    logging.info(userString + '\n' + response + '\n'))
