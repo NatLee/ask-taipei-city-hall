@@ -32,7 +32,10 @@ def fbResponse():
 
         fbclass = botClass(directBack, response, text, "fb", user_id)
         userString = userName + '_' + user_id + ': ' + text
-        fbclass.get_format()
+        try:
+            fbclass.get_format()
+        except Exception as err:
+            logging.error("錯誤訊息：" + err["error"]["message"] + '\n')
         loggingFb(userString + '\n' + response[0]["ans"] + '\n')
         return "Success"
 
@@ -61,7 +64,8 @@ def getTextMessage():
 
 
 def send_typing_on(to):
-    post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token={token}'.format(token=config.ACCESS_TOKEN)
+    post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token={token}'.format(
+        token=config.ACCESS_TOKEN)
     response_message = json.dumps({"recipient": {"id": to},
                                    "sender_action": "typing_on"})
     requests.post(post_message_url,
