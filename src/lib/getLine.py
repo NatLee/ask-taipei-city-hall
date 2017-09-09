@@ -6,7 +6,6 @@ from lib.botClass import botClass
 import lib.responseLogic as responseLogic
 import linebot.exceptions
 import time as T
-import lib.lineClass as lineClass
 
 import logging
 import logging.config
@@ -25,13 +24,9 @@ def getLineReqCallback(app, handler):
 
 
 def setUserLog(userString, response):
-    #userDataLog = open("userdataLine.log", mode='a', encoding='utf-8')
-    #userDataLog.write(userString + '\n' + response + '\n')
-    #userDataLog.close()
     logging.config.fileConfig('lib/logconfig.ini')
-    logging.info(userString + '\n' + response + '\n')
-
-
+    line = logging.getLogger("line")
+    line.info(userString + '\n' + response + '\n')
 
 
 def getUserSession(line_bot_api, event):

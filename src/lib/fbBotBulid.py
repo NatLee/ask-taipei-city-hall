@@ -74,4 +74,5 @@ def setUserLog(userString, response):
     userDataLog.close()
     '''
     logging.config.fileConfig('lib/logconfig.ini')
-    logging.info(userString + '\n' + response[0]["ans"] + '\n')
+    fb = logging.getLogger("fb")
+    fb.info(userString + '\n' + response[0]["ans"] + '\n')
