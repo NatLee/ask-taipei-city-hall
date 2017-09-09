@@ -6,6 +6,7 @@ from linebot.models import (
     TextSendMessage,
     ImageSendMessage
 )
+
 from lib.fbMessageAPI import (
     Messager,
     ActionButton,
@@ -16,8 +17,8 @@ from lib.fbMessageAPI import (
 def menuAction(fbOrLine, response_list):
     actions = []
     length = len(response_list)
-    if length > 4:
-        length = 4
+    if length > 3:
+        length = 3
     for i in range(length):
         label=str(response_list[i]["qu_old"][0:19])
         text=str(response_list[i]["qu_old"])

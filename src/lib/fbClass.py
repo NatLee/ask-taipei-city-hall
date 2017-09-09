@@ -4,8 +4,9 @@ from lib.fbMessageAPI import (
     ActionButton,
     ButtonType
 )
+import lib.templateFunc import menuAction
 import config
-import lib.templateFunc
+
 
 class FbClass:
     def __init__(self, directBack, response, input_message, user_id):
