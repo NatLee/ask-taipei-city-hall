@@ -10,12 +10,18 @@ import lib.responseLogic as responseLogic
 import logging
 import logging.config
 
+def loggingFb(string):
+    logging.config.fileConfig('lib/logconfig.ini')
+    fb = logging.getLogger("fb")
+    fb.info(string)
+
 
 def fbResponse():
     if request.method == 'GET':
         return helloTokenFB()
     if request.method == 'POST':
-        print("--------------FacebookBot--------------")
+        #print("--------------FacebookBot--------------")
+        loggingFb("--------------FacebookBot--------------")
         text, user_id = getTextMessage()  # 這行可以得到使用者傳入的文字
         send_typing_on(user_id)
         jsonData = requests.get('https://graph.facebook.com/v2.6/' + user_id +
@@ -68,11 +74,4 @@ def send_typing_on(to):
 
 
 def setUserLog(userString, response):
-    '''
-    userDataLog = open("userdataFB.log", mode='a', encoding='utf-8')
-    userDataLog.write(userString + '\n' + response[0]["ans"] + '\n')
-    userDataLog.close()
-    '''
-    logging.config.fileConfig('lib/logconfig.ini')
-    fb = logging.getLogger("fb")
-    fb.info(userString + '\n' + response[0]["ans"] + '\n')
+    loggingFb(userString + '\n' + response[0]["ans"] + '\n')
