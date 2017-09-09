@@ -9,7 +9,7 @@ class Response():
         self.input = input_message
 
     def loadData(self):
-        with open('../trainingData/data.json', 'r', encoding='UTF-8') as data_file:
+        with open('data.json', 'r', encoding='UTF-8') as data_file:
             return json.load(data_file)
 
     def get(self):
@@ -24,11 +24,14 @@ class Response():
             result = matchList
             directBack = False
         else:  # 要詢問是否要問是否為compareList這幾項問題
-            if len(compareList) > 0:
+            if len(compareList) == 1:
                 result = compareList
+            elif len(compareList) > 1:
+                result = compareList
+                directBack = False
             else:
                 result = matchList
-            directBack = False
+                directBack = False
 
         return directBack, result
 
@@ -38,7 +41,7 @@ class Response():
         # 產生一個空的資料集
         matchAry = self.getModel()
         # 產生一個空的資料集
-        compareAry = self.getModel()
+        compareAry = []
 
         for objData in data:
             # 字串比對相似度 並且加到matchAry (高到低)
