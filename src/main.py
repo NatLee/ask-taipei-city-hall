@@ -1,8 +1,8 @@
 # coding: utf-8
 from flask import Flask
-from lib.lineBotBuild import (handler1, handler2)
-import lib.fbBotBulid as fb
-import lib.getLine as getLine
+#from lib.lineBotBuild import (handler1, handler2)
+import lib.fbBotBuild as fb
+import lib.lineBotBuild as line
 import sys
 #sys.stderr = open('server.log', 'a')
 app = Flask(__name__)
@@ -20,13 +20,13 @@ def callback():
 
 @app.route("/callback1", methods=['POST'])
 def callback1():
-    getLine.getLineReqCallback(app, handler1)
+    line.getLineReqCallback(app, line.handler1)
     return 'OK_1'
 
 
 @app.route("/callback2", methods=['POST'])
 def callback2():
-    getLine.getLineReqCallback(app, handler2)
+    line.getLineReqCallback(app, line.handler2)
     return 'OK_2'
 
 
