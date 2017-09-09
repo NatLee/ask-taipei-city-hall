@@ -28,7 +28,7 @@ def setUserLog(userString, response):
     #userDataLog = open("userdataLine.log", mode='a', encoding='utf-8')
     #userDataLog.write(userString + '\n' + response + '\n')
     #userDataLog.close()
-    logging.config.fileConfig('lib\logconfig.ini')
+    logging.config.fileConfig('lib/logconfig.ini')
     logging.info(userString + '\n' + response + '\n')
 
 

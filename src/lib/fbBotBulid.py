@@ -73,5 +73,5 @@ def setUserLog(userString, response):
     userDataLog.write(userString + '\n' + response[0]["ans"] + '\n')
     userDataLog.close()
     '''
-    logging.config.fileConfig('lib\logconfig.ini')
+    logging.config.fileConfig('lib/logconfig.ini')
     logging.info(userString + '\n' + response + '\n')
