@@ -47,13 +47,16 @@ def getHandleMessage(line_bot_api, event):
     res = responseLogic.Response(event.message.text)
     directBack, response = res.get()
 
-    lineclass = lineClass.LineClass(directBack,  response, event.message.text)
+    # 設定回傳的訊息
+    lineclass = lineClass.LineClass(directBack, response, event.message.text)
     send = lineclass.get_line_format()
     try:
         line_bot_api.reply_message(event.reply_token, send)
+        # 找不到任何答案時 response是空的array
+        setUserLog(userString, response[0]["ans"])
     except linebot.exceptions.LineBotApiError as e:
         print(e)
         line_bot_api.reply_message(
             event.reply_token, TextSendMessage(text='啊哦！關於這個問題或許我們遇到了點麻煩。'))
-    setUserLog(userString, response[0]["ans"])
+
     print("一次處理時間: " + str(T.time() - timeTemp))

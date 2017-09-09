@@ -1,11 +1,15 @@
 # coding=utf-8
+import config
 from lib.fbMessageAPI import (
     Messager,
     ActionButton,
     ButtonType
 )
-from lib.templateFunc import menuAction
-import config
+from lib.templateFunc import (
+    menuAction,
+    actionButton
+)
+
 
 
 class FbClass:
