@@ -1,7 +1,8 @@
 # coding: utf-8
 import json
 from enum import Enum
-
+import logging
+import logging.config
 import requests
 
 URL_BASE = "https://graph.facebook.com/v2.9/me/"
@@ -203,17 +204,16 @@ class Messager(object):
         return {Recipient.ID.value: user_id}
 
     def _send(self, message_data):
+        logging.config.fileConfig('lib/logconfig.ini')
         post_message_url = URL_BASE + "messages?access_token={token}".format(
             token=self.access_token)
         response_message = json.dumps(message_data)
         req = requests.post(post_message_url,
                             headers={"Content-Type": "application/json"},
                             data=response_message)
-        # fmt = "[{status}/{reason}/{text}] Reply to {recipient}: {content}"
-        '''
-        print(fmt.format(status=req.status_code,
-                         reason=req.reason,
-                         text=req.text,
-                         recipient=message_data[RECIPIENT_FIELD],
-                         content=message_data[MESSAGE_FIELD]))
-        '''
+        fmt = "[{status}/{reason}/{text}] Reply to {recipient}: {content}"
+        logging.error(fmt.format(status=req.status_code,
+                      reason=req.reason,
+                      text=req.text,
+                      recipient=message_data[RECIPIENT_FIELD],
+                      content=message_data[MESSAGE_FIELD]))

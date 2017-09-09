@@ -1,5 +1,4 @@
 Flask
-chatterbot
 line-bot-sdk
 numpy
 requests
