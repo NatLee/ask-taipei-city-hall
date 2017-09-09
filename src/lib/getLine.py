@@ -2,7 +2,7 @@
 
 from flask import request, abort
 from linebot.models import TextSendMessage
-
+from lib.botClass import botClass
 import lib.responseLogic as responseLogic
 import linebot.exceptions
 import time as T
@@ -48,8 +48,8 @@ def getHandleMessage(line_bot_api, event):
     directBack, response = res.get()
 
     # 設定回傳的訊息
-    lineclass = lineClass.LineClass(directBack, response, event.message.text)
-    send = lineclass.get_line_format()
+    lineclass = botClass(directBack, response, event.message.text, "line", 0)
+    send = lineclass.get_format()
     try:
         line_bot_api.reply_message(event.reply_token, send)
         # 找不到任何答案時 response是空的array
