@@ -34,21 +34,21 @@ class botClass:
             if self.bot_type is 'line':
                 self.send.append(TextSendMessage(text=self.response[0]["ans"]))
             elif self.bot_type is 'fb':
-                if len(self.response[0]["ans"])<=600:
+                if len(self.response[0]["ans"]) <= 600:
                     self.bot.send_text(self.user_id, self.response[0]["ans"])
                 else:
-                    self.bot.send_longText(self.user_id, self.response[0]["ans"])
+                    self.bot.send_longText(
+                        self.user_id, self.response[0]["ans"])
         else:
             self.low_confidence_event()
         return self.send
 
     def low_confidence_event(self):
-
         logging.config.fileConfig('lib/logconfig.ini')
 
         response_list = self.response
         google_url = "https://www.google.com.tw/search?q="
-        if len(response_list) > 1:
+        if len(response_list) >= 1:
             self.get_menu(response_list)
             logging.info('Bot: （因項目過多，送出選單）')
         else:
@@ -96,13 +96,13 @@ class botClass:
     def get_nofind_message(self):
         if self.bot_type is 'line':
             self.send.append(ImageSendMessage(
-                original_content_url=self.img_url+'SMILE.jpg',
-                preview_image_url=self.img_url+'SMILE.jpg'
+                original_content_url=self.img_url + 'SMILE.jpg',
+                preview_image_url=self.img_url + 'SMILE.jpg'
             ))
         elif self.bot_type is 'fb':
             self.bot.send_image(
                 self.user_id,
-                self.img_url+'SMILE.jpg'
+                self.img_url + 'SMILE.jpg'
             )
 
     def _menuAction(self, fbOrLine, response_list):
