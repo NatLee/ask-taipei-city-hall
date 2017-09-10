@@ -47,6 +47,13 @@ class Response():
             self.match_with_list(matchAry, objData)
             # 字串出現於原始資料 有出現的話就加到compareAry之中
             self.compare_with_list(compareAry, objData)
+
+        # 要清空con == 0 的 obj 用pop所以迴圈要從後面算
+        for i in range(len(matchAry) - 1, -1, -1):
+            obj = matchAry[i]
+            if(obj["con"] == 0):
+                matchAry.pop(i)
+
         # 回傳兩個array
         return matchAry, compareAry
 
