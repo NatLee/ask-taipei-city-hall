@@ -34,9 +34,10 @@ def fbResponse():
         userString = userName + '_' + user_id + ': ' + text
         try:
             fbclass.get_format()
+            loggingFb(userString + '\n' + response[0]["ans"] + '\n')
         except Exception as err:
             logging.error("錯誤訊息：" + err["error"]["message"] + '\n')
-        loggingFb(userString + '\n' + response[0]["ans"] + '\n')
+        
         return "Success"
 
 
