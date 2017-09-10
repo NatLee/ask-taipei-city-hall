@@ -74,12 +74,12 @@ def getHandleMessage(line_bot_api, event):
     lineclass = botClass(directBack, response, event.message.text, "line", 0)
     send = lineclass.get_format()
     try:
-        if 'text' in send[0] and send[0]['text'] >= 1500:
-            length = len(send[0]['text'])
+        if hasattr(send[0], 'text') and len(send[0].text) >= 1500:
+            length = len(send[0].text)
             count = int(length/1500)+1
             for i in range(count):
-                substring = text[ i*1500 : (i+1)*1500 ]
-                line_bot_api.push_message(event.source.user_id,TextSendMessage(text=substring))
+                substring = send[0].text[i*1500: (i+1)*1500]
+                line_bot_api.push_message(event.source.user_id, TextSendMessage(text=substring))
         else:
             line_bot_api.reply_message(event.reply_token, send)
             # 找不到任何答案時 response是空的array

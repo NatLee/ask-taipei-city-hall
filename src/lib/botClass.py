@@ -71,9 +71,7 @@ class botClass:
                 )
 
     def get_menu(self, response_list):
-
         logging.config.fileConfig('lib/logconfig.ini')
-
         actions = self._menuAction(self.bot_type, response_list)
         logging.info('選單的選項數: ' + str(len(actions)))
         if self.bot_type is 'line':
