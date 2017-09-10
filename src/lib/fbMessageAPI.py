@@ -139,9 +139,18 @@ class Messager(object):
                              headers={"Content-Type": "application/json"},
                              data=json.dumps(data))
 
+    def send_longText(self, user_id, text):
+        length = len(text)
+        count = int(length/600)+1
+        for i in range(count):
+            substring = text[ i*600 : (i+1)*600 ]
+            self.send_text(user_id, substring)
+            
+
     def send_text(self, user_id, text):
         self._send({RECIPIENT_FIELD: self._build_recipient(user_id),
                     MESSAGE_FIELD: {MessageType.TEXT.value: text}})
+
 
     def send_image(self, user_id, image):
         self._send({RECIPIENT_FIELD: self._build_recipient(user_id),
