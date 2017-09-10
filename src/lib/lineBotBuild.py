@@ -73,13 +73,13 @@ def getHandleMessage(line_bot_api, event):
     # 設定回傳的訊息
     lineclass = botClass(directBack, response, event.message.text, "line", 0)
     send = lineclass.get_format()
-    if 'text' in send[0] and send[0]['text'] >= 1500:
+    if hasattr(send[0], 'text') and len(send[0].text) >= 1500:
         try:
-            length = len(send[0]['text'])
+            length = len(send[0].text)
             count = int(length/1500)+1
             for i in range(count):
-                substring = text[ i*1500 : (i+1)*1500 ]
-                line_bot_api.push_message(event.source.user_id,TextSendMessage(text=substring))
+                substring = send[0].text[i*1500: (i+1)*1500]
+                line_bot_api.push_message(event.source.user_id, TextSendMessage(text=substring))
         except linebot.exceptions.LineBotApiError as e:
             logging.error(e)
             line_bot_api.reply_message(
