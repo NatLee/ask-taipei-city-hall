@@ -17,9 +17,9 @@ class Response():
         # 直接回傳
         directBack = True
         # 信心水準處理事件
-        if matchList[0]["con"] > 0.55:  # 可以直接回
+        if matchList and matchList[0]["con"] > 0.55:  # 可以直接回
             result = matchList
-        elif matchList[0]["con"] > 0.3:  # 要詢問是否要問是否為matchList這幾項問題
+        elif matchList and matchList[0]["con"] > 0.3:  # 要詢問是否要問是否為matchList這幾項問題
             result = matchList
             directBack = False
         else:  # 要詢問是否要問是否為compareList這幾項問題
@@ -53,7 +53,7 @@ class Response():
             obj = matchAry[i]
             if(obj["con"] == 0):
                 matchAry.pop(i)
-                
+
         # compare裡面應該要出現類別為QA的應對回答 不然就要拿掉
         for i in range(len(compareAry) - 1, -1, -1):
             obj = compareAry[i]
