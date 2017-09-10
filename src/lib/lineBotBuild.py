@@ -73,25 +73,19 @@ def getHandleMessage(line_bot_api, event):
     # 設定回傳的訊息
     lineclass = botClass(directBack, response, event.message.text, "line", 0)
     send = lineclass.get_format()
-    if 'text' in send[0] and send[0]['text'] >= 1500:
-        try:
+    try:
+        if 'text' in send[0] and send[0]['text'] >= 1500:
             length = len(send[0]['text'])
             count = int(length/1500)+1
             for i in range(count):
                 substring = text[ i*1500 : (i+1)*1500 ]
                 line_bot_api.push_message(event.source.user_id,TextSendMessage(text=substring))
-        except linebot.exceptions.LineBotApiError as e:
-            logging.error(e)
-            line_bot_api.reply_message(
-                event.reply_token, TextSendMessage(text='啊哦！關於這個問題或許我們遇到了點麻煩。'))
-    else:
-        try:
+        else:
             line_bot_api.reply_message(event.reply_token, send)
             # 找不到任何答案時 response是空的array
             loggingLine(userString + '\n' + response[0]["ans"] + '\n')
-        except linebot.exceptions.LineBotApiError as e:
-            logging.error(e)
-            line_bot_api.reply_message(
-                event.reply_token, TextSendMessage(text='啊哦！關於這個問題或許我們遇到了點麻煩。'))
+    except linebot.exceptions.LineBotApiError as e:
+        logging.error(e)
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='啊哦！關於這個問題或許我們遇到了點麻煩。'))
 
     loggingLine("一次處理時間: " + str(T.time() - timeTemp))
