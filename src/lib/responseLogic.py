@@ -17,9 +17,9 @@ class Response():
         # 直接回傳
         directBack = True
         # 信心水準處理事件
-        if matchList and matchList[0]["con"] > 0.55:  # 可以直接回
+        if matchList and matchList[0]["con"] > 0.6:  # 可以直接回
             result = matchList
-        elif matchList and matchList[0]["con"] > 0.3:  # 要詢問是否要問是否為matchList這幾項問題
+        elif matchList and matchList[0]["con"] > 0.4:  # 要詢問是否要問是否為matchList這幾項問題
             result = matchList
             directBack = False
         else:  # 要詢問是否要問是否為compareList這幾項問題
