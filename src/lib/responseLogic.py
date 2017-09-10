@@ -20,12 +20,9 @@ class Response():
         if matchList and matchList[0]["con"] > 0.5:  # 可以直接回
             result = matchList
         else:  # 要詢問是否要問是否為compareList這幾項問題
-            if len(compareList) == 1:
-                result = compareList
-            else:
-                result = compareList
-                directBack = False
-            
+            result = compareList
+            directBack = False
+
         return directBack, result
 
     def getList(self):
