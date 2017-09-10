@@ -22,13 +22,10 @@ class Response():
         else:  # 要詢問是否要問是否為compareList這幾項問題
             if len(compareList) == 1:
                 result = compareList
-            elif len(compareList) > 1:
+            else:
                 result = compareList
                 directBack = False
-            else:
-                result = matchList
-                directBack = False
-
+            
         return directBack, result
 
     def getList(self):
