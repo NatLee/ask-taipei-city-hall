@@ -1,15 +1,11 @@
-
-
 from linebot import LineBotApi, WebhookHandler
 from linebot.models import TextMessage, MessageEvent, TextSendMessage
 import config
-
 from flask import request, abort
 from lib.botClass import botClass
 import lib.responseLogic as responseLogic
 import linebot.exceptions
 import time as T
-
 import logging
 import logging.config
 
@@ -63,8 +59,8 @@ def getHandleMessage(line_bot_api, event):
     res = responseLogic.Response(event.message.text)
     directBack, response = res.get()
 
-    # 設定回傳的訊息
     logging.info("使用者:" + userString)
+    # 設定回傳的訊息
     lineclass = botClass(directBack, response, event.message.text, "line", 0)
     send = lineclass.get_format()
     try:
