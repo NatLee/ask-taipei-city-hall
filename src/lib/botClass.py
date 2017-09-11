@@ -9,7 +9,8 @@ from linebot.models import (
     TemplateSendMessage,
     ButtonsTemplate,
     TextSendMessage,
-    ImageSendMessage
+    ImageSendMessage,
+    URITemplateAction
 )
 import config
 
@@ -85,10 +86,9 @@ class botClass:
                     thumbnail_image_url=self.img_url + 'SMILE.jpg',
                     title='對不起我不太懂您的問題>_<，所以我幫你餵了估狗，希望對您有幫助',
                     text='點選按鈕直接解答',
-                    actions=[ActionButton(
-                        ButtonType.POSTBACK,
-                        title=self.input_message,
-                        payload=google_url + self.input_message
+                    actions=[URITemplateAction(
+                        label=self.input_message,
+                        uri=google_url + self.input_message
                     )],
                 )
             ))
