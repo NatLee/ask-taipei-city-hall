@@ -21,21 +21,13 @@ line_bot_api2 = LineBotApi(config.channel_access_token2)
 handler2 = WebhookHandler(config.channel_secret2)
 
 
-def loggingLine(string):
-    logging.config.fileConfig('lib/logconfig.ini')
-    line = logging.getLogger("line")
-    line.info(string)
-
-
 @handler1.add(MessageEvent, message=TextMessage)
 def handle_message1(event):
-    # loggingLine("--------------LineBot 1--------------")
     getHandleMessage(line_bot_api1, event)
 
 
 @handler2.add(MessageEvent, message=TextMessage)
 def handle_message2(event):
-    # loggingLine("--------------LineBot 2--------------")
     getHandleMessage(line_bot_api2, event)
 
 
@@ -62,6 +54,7 @@ def getUserSession(line_bot_api, event):
 
 
 def getHandleMessage(line_bot_api, event):
+    logging.config.fileConfig('lib/logconfig.ini')
     # 抓出使用者名字、ID跟訊息
     timeTemp = T.time()
     userString = getUserSession(line_bot_api, event)
@@ -71,6 +64,7 @@ def getHandleMessage(line_bot_api, event):
     directBack, response = res.get()
 
     # 設定回傳的訊息
+    logging.info("使用者:" + userString)
     lineclass = botClass(directBack, response, event.message.text, "line", 0)
     send = lineclass.get_format()
     try:
@@ -82,10 +76,7 @@ def getHandleMessage(line_bot_api, event):
                 line_bot_api.push_message(event.source.user_id, TextSendMessage(text=substring))
         else:
             line_bot_api.reply_message(event.reply_token, send)
-            # 找不到任何答案時 response是空的array
-            loggingLine(userString + '\n' + response[0]["ans"] + '\n')
     except linebot.exceptions.LineBotApiError as e:
         logging.error(e)
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text='啊哦！關於這個問題或許我們遇到了點麻煩。'))
-
-    loggingLine("一次處理時間: " + str(T.time() - timeTemp))
+    logging.info("一次處理時間: " + str(T.time() - timeTemp))

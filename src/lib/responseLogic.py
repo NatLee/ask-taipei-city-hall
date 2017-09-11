@@ -109,8 +109,8 @@ class Response():
                 count += 1
 
         leng = len(self.input)
-        if(leng == 0):
-            confidence = 0
-        else:
+        try:
             confidence = count / leng
+        except ZeroDivisionError:
+            confidence = 0
         return confidence

@@ -10,12 +10,6 @@ import logging
 import logging.config
 
 
-def loggingFb(string):
-    logging.config.fileConfig('lib/logconfig.ini')
-    fb = logging.getLogger("fb")
-    fb.info(string)
-
-
 def fbResponse():
     if request.method == 'GET':
         return helloTokenFB()
@@ -31,13 +25,12 @@ def fbResponse():
         directBack, response = res.get()
 
         fbclass = botClass(directBack, response, text, "fb", user_id)
-        userString = userName + '_' + user_id + ': ' + text
+        logging.info("使用者:" + userName)
+        # userString = userName + '_' + user_id + ': ' + text
         try:
             fbclass.get_format()
-            loggingFb(userString + '\n' + response[0]["ans"] + '\n')
         except Exception as err:
-            logging.error("錯誤訊息：" + str(err) + '\n')
-
+            logging.error("錯誤訊息：" + err["error"]["message"] + '\n')
         return "Success"
 
 
@@ -52,7 +45,6 @@ def getTextMessage():
     text = ''
     recipient_id = ''
     output = request.get_json()
-    # print(output)
     messaging = output['entry'][0]['messaging'][0]
     recipient_id = messaging['sender']['id']
     if(messaging.get('message') and messaging['message'].get('text')):

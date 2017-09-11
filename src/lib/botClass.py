@@ -28,6 +28,7 @@ class botClass:
         self.bot = Messager(config.ACCESS_TOKEN)
         self.send = []
         self.img_url = "https://raw.githubusercontent.com/NatLee/test/master/"
+        logging.config.fileConfig('lib/logconfig.ini')
 
     def get_format(self):
         if self.directBack:
@@ -39,13 +40,12 @@ class botClass:
                 else:
                     self.bot.send_longText(
                         self.user_id, self.response[0]["ans"])
+            logging.info(self.bot_type + ":" + self.response[0]["ans"])
         else:
             self.low_confidence_event()
         return self.send
 
     def low_confidence_event(self):
-        logging.config.fileConfig('lib/logconfig.ini')
-
         response_list = self.response
         google_url = "https://www.google.com.tw/search?q="
         if len(response_list) >= 1:
@@ -53,7 +53,7 @@ class botClass:
             logging.info('Bot: （因項目過多，送出選單）')
         else:
             self.get_nofind_message()
-            logging.info('資料庫中找不到任何相關的選項')
+            logging.info('資料庫中找不到任何相關的選項,已回傳google搜尋')
             if self.bot_type is 'line':
                 self.send.append(TextSendMessage(
                     text='對不起我不太懂您的問題>_<，所以我幫你餵了估狗，希望對您有幫助\n' +
@@ -71,7 +71,6 @@ class botClass:
                 )
 
     def get_menu(self, response_list):
-        logging.config.fileConfig('lib/logconfig.ini')
         actions = self._menuAction(self.bot_type, response_list)
         logging.info('選單的選項數: ' + str(len(actions)))
         if self.bot_type is 'line':
@@ -106,6 +105,7 @@ class botClass:
     def _menuAction(self, fbOrLine, response_list):
         actions = []
         length = len(response_list)
+        logging.info("回傳選單" + str(response_list))
         if length > 3:
             length = 3
         for i in range(length):
