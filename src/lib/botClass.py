@@ -35,6 +35,7 @@ class botClass:
             if self.bot_type is 'line':
                 self.send.append(TextSendMessage(text=self.response[0]["ans"]))
             elif self.bot_type is 'fb':
+                self.bot.typing(self.user_id)
                 if len(self.response[0]["ans"]) <= 600:
                     self.bot.send_text(self.user_id, self.response[0]["ans"])
                 else:
