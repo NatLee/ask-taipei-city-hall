@@ -84,8 +84,8 @@ class botClass:
                 alt_text='問題選單',
                 template=ButtonsTemplate(
                     thumbnail_image_url=self.img_url + 'SMILE.jpg',
-                    title='對不起我不太懂您的問題>_<，所以我幫你餵了估狗，希望對您有幫助',
-                    text='點選按鈕直接解答',
+                    title='對不起，我不太懂您的問題',
+                    text='我餵了估狗(,,・ω・,,)，希望對您有幫助，點選按鈕直接搜尋！',
                     actions=[URITemplateAction(
                         label=self.input_message,
                         uri=google_url + self.input_message
@@ -99,7 +99,7 @@ class botClass:
             )
             self.bot.send_buttons(
                 self.user_id,
-                '對不起我不太懂您的問題>_<，所以我幫你餵了估狗，希望對您有幫助',
+                '對不起我不太懂您的問題，我餵了估狗(,,・ω・,,)，希望對您有幫助',
                 [ActionButton(
                     ButtonType.WEB_URL,
                     self.input_message,
