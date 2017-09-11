@@ -145,7 +145,7 @@ class Messager(object):
         for i in range(count):
             substring = text[ i*600 : (i+1)*600 ]
             self.send_text(user_id, substring)
-            
+
 
     def send_text(self, user_id, text):
         self._send({RECIPIENT_FIELD: self._build_recipient(user_id),
@@ -221,8 +221,9 @@ class Messager(object):
                             headers={"Content-Type": "application/json"},
                             data=response_message)
         fmt = "[{status}/{reason}/{text}] Reply to {recipient}: {content}"
-        logging.error(fmt.format(status=req.status_code,
-                      reason=req.reason,
-                      text=req.text,
-                      recipient=message_data[RECIPIENT_FIELD],
-                      content=message_data[MESSAGE_FIELD]))
+        if req.status_code != 200:
+            logging.error(fmt.format(status=req.status_code,
+                          reason=req.reason,
+                          text=req.text,
+                          recipient=message_data[RECIPIENT_FIELD],
+                          content=message_data[MESSAGE_FIELD]))
