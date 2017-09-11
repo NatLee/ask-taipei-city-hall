@@ -47,28 +47,13 @@ class botClass:
 
     def low_confidence_event(self):
         response_list = self.response
-        google_url = "https://www.google.com.tw/search?q="
+
         if len(response_list) >= 1:
             self.get_menu(response_list)
             logging.info('Bot: （因項目過多，送出選單）')
         else:
-            self.get_nofind_message()
             logging.info('資料庫中找不到任何相關的選項,已回傳google搜尋')
-            if self.bot_type is 'line':
-                self.send.append(TextSendMessage(
-                    text='對不起我不太懂您的問題>_<，所以我幫你餵了估狗，希望對您有幫助\n' +
-                    google_url + self.input_message)
-                )
-            elif self.bot_type is 'fb':
-                self.bot.send_buttons(
-                    self.user_id,
-                    '對不起我不太懂您的問題>_<，所以我幫你餵了估狗，希望對您有幫助',
-                    [ActionButton(
-                        ButtonType.WEB_URL,
-                        self.input_message,
-                        google_url + self.input_message
-                    )]
-                )
+            self.get_nofind_message()
 
     def get_menu(self, response_list):
         actions = self._menuAction(self.bot_type, response_list)
@@ -91,15 +76,34 @@ class botClass:
             )
 
     def get_nofind_message(self):
+        google_url = "https://www.google.com.tw/search?q="
         if self.bot_type is 'line':
-            self.send.append(ImageSendMessage(
-                original_content_url=self.img_url + 'SMILE.jpg',
-                preview_image_url=self.img_url + 'SMILE.jpg'
+            self.send.append(TemplateSendMessage(
+                alt_text='問題選單',
+                template=ButtonsTemplate(
+                    thumbnail_image_url=self.img_url + 'SMILE.jpg',
+                    title='對不起我不太懂您的問題>_<，所以我幫你餵了估狗，希望對您有幫助',
+                    text='點選按鈕直接解答',
+                    actions=[ActionButton(
+                        ButtonType.POSTBACK,
+                        title=self.input_message,
+                        payload=google_url + self.input_message
+                    )],
+                )
             ))
         elif self.bot_type is 'fb':
             self.bot.send_image(
                 self.user_id,
                 self.img_url + 'SMILE.jpg'
+            )
+            self.bot.send_buttons(
+                self.user_id,
+                '對不起我不太懂您的問題>_<，所以我幫你餵了估狗，希望對您有幫助',
+                [ActionButton(
+                    ButtonType.WEB_URL,
+                    self.input_message,
+                    google_url + self.input_message
+                )]
             )
 
     def _menuAction(self, fbOrLine, response_list):
