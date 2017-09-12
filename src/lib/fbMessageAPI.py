@@ -1,7 +1,8 @@
 # coding: utf-8
 import json
 from enum import Enum
-
+import logging
+import logging.config
 import requests
 
 URL_BASE = "https://graph.facebook.com/v2.9/me/"
@@ -138,9 +139,18 @@ class Messager(object):
                              headers={"Content-Type": "application/json"},
                              data=json.dumps(data))
 
+    def send_longText(self, user_id, text):
+        length = len(text)
+        count = int(length/600)+1
+        for i in range(count):
+            substring = text[ i*600 : (i+1)*600 ]
+            self.send_text(user_id, substring)
+
+
     def send_text(self, user_id, text):
         self._send({RECIPIENT_FIELD: self._build_recipient(user_id),
                     MESSAGE_FIELD: {MessageType.TEXT.value: text}})
+
 
     def send_image(self, user_id, image):
         self._send({RECIPIENT_FIELD: self._build_recipient(user_id),
@@ -203,18 +213,17 @@ class Messager(object):
         return {Recipient.ID.value: user_id}
 
     def _send(self, message_data):
+        logging.config.fileConfig('lib/logconfig.ini')
         post_message_url = URL_BASE + "messages?access_token={token}".format(
             token=self.access_token)
         response_message = json.dumps(message_data)
-        #print(response_message)
         req = requests.post(post_message_url,
                             headers={"Content-Type": "application/json"},
                             data=response_message)
         fmt = "[{status}/{reason}/{text}] Reply to {recipient}: {content}"
-        '''
-        print(fmt.format(status=req.status_code,
-                         reason=req.reason,
-                         text=req.text,
-                         recipient=message_data[RECIPIENT_FIELD],
-                         content=message_data[MESSAGE_FIELD]))
-        '''
+        if req.status_code != 200:
+            logging.error(fmt.format(status=req.status_code,
+                          reason=req.reason,
+                          text=req.text,
+                          recipient=message_data[RECIPIENT_FIELD],
+                          content=message_data[MESSAGE_FIELD]))

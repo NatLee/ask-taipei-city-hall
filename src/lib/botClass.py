@@ -9,9 +9,13 @@ from linebot.models import (
     TemplateSendMessage,
     ButtonsTemplate,
     TextSendMessage,
-    ImageSendMessage
+    ImageSendMessage,
+    URITemplateAction
 )
 import config
+
+import logging
+import logging.config
 
 
 class botClass:
@@ -25,45 +29,37 @@ class botClass:
         self.bot = Messager(config.ACCESS_TOKEN)
         self.send = []
         self.img_url = "https://raw.githubusercontent.com/NatLee/test/master/"
+        logging.config.fileConfig('lib/logconfig.ini')
 
     def get_format(self):
         if self.directBack:
             if self.bot_type is 'line':
                 self.send.append(TextSendMessage(text=self.response[0]["ans"]))
             elif self.bot_type is 'fb':
-                self.bot.send_text(self.user_id, self.response[0]["ans"])
+                self.bot.typing(self.user_id)
+                if len(self.response[0]["ans"]) <= 600:
+                    self.bot.send_text(self.user_id, self.response[0]["ans"])
+                else:
+                    self.bot.send_longText(
+                        self.user_id, self.response[0]["ans"])
+            logging.info(self.bot_type + ":" + self.response[0]["ans"])
         else:
             self.low_confidence_event()
         return self.send
 
     def low_confidence_event(self):
         response_list = self.response
-        google_url = "https://www.google.com.tw/search?q="
-        if len(response_list) > 1:
+
+        if len(response_list) >= 1:
             self.get_menu(response_list)
-            print('Bot: （因項目過多，送出選單）')
+            logging.info('Bot: （因項目過多，送出選單）')
         else:
+            logging.info('資料庫中找不到任何相關的選項,已回傳google搜尋')
             self.get_nofind_message()
-            print('資料庫中找不到任何相關的選項')
-            if self.bot_type is 'line':
-                self.send.append(TextSendMessage(
-                    text='對不起我不太懂您的問題>_<，所以我幫你餵了估狗，希望對您有幫助\n' +
-                    google_url + self.input_message)
-                )
-            elif self.bot_type is 'fb':
-                self.bot.send_buttons(
-                    self.user_id,
-                    '對不起我不太懂您的問題>_<，所以我幫你餵了估狗，希望對您有幫助',
-                    [ActionButton(
-                        ButtonType.WEB_URL,
-                        self.input_message,
-                        google_url + self.input_message
-                    )]
-                )
 
     def get_menu(self, response_list):
         actions = self._menuAction(self.bot_type, response_list)
-        print('選單的選項數: ' + str(len(actions)))
+        logging.info('選單的選項數: ' + str(len(actions)))
         if self.bot_type is 'line':
             self.send.append(TemplateSendMessage(
                 alt_text='問題選單',
@@ -82,20 +78,39 @@ class botClass:
             )
 
     def get_nofind_message(self):
+        google_url = "https://www.google.com.tw/search?q="
         if self.bot_type is 'line':
-            self.send.append(ImageSendMessage(
-                original_content_url=self.img_url+'SMILE.jpg',
-                preview_image_url=self.img_url+'SMILE.jpg'
+            self.send.append(TemplateSendMessage(
+                alt_text='問題選單',
+                template=ButtonsTemplate(
+                    thumbnail_image_url=self.img_url + 'SMILE.jpg',
+                    title='對不起，我不太懂您的問題',
+                    text='(,,・ω・,,)我餵了估狗，希望對您有幫助，點選按鈕直接搜尋！',
+                    actions=[URITemplateAction(
+                        label=self.input_message,
+                        uri=google_url + self.input_message
+                    )],
+                )
             ))
         elif self.bot_type is 'fb':
             self.bot.send_image(
                 self.user_id,
-                self.img_url+'SMILE.jpg'
+                self.img_url + 'SMILE.jpg'
+            )
+            self.bot.send_buttons(
+                self.user_id,
+                '(,,・ω・,,)對不起我不太懂您的問題，我餵了估狗，希望對您有幫助',
+                [ActionButton(
+                    ButtonType.WEB_URL,
+                    self.input_message,
+                    google_url + self.input_message
+                )]
             )
 
     def _menuAction(self, fbOrLine, response_list):
         actions = []
         length = len(response_list)
+        logging.info("回傳選單" + str(response_list))
         if length > 3:
             length = 3
         for i in range(length):

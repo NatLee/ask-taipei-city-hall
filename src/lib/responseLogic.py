@@ -17,20 +17,11 @@ class Response():
         # 直接回傳
         directBack = True
         # 信心水準處理事件
-        if matchList[0]["con"] > 0.55:  # 可以直接回
+        if matchList and matchList[0]["con"] > 0.5:  # 可以直接回
             result = matchList
-        elif matchList[0]["con"] > 0.3:  # 要詢問是否要問是否為matchList這幾項問題
-            result = matchList
-            directBack = False
         else:  # 要詢問是否要問是否為compareList這幾項問題
-            if len(compareList) == 1:
-                result = compareList
-            elif len(compareList) > 1:
-                result = compareList
-                directBack = False
-            else:
-                result = matchList
-                directBack = False
+            result = compareList
+            directBack = False
 
         return directBack, result
 
@@ -47,6 +38,19 @@ class Response():
             self.match_with_list(matchAry, objData)
             # 字串出現於原始資料 有出現的話就加到compareAry之中
             self.compare_with_list(compareAry, objData)
+
+        # 要清空con == 0 的 obj 用pop所以迴圈要從後面算
+        for i in range(len(matchAry) - 1, -1, -1):
+            obj = matchAry[i]
+            if(obj["con"] == 0):
+                matchAry.pop(i)
+
+        # compare裡面應該要出現類別為QA的應對回答 不然就要拿掉
+        for i in range(len(compareAry) - 1, -1, -1):
+            obj = compareAry[i]
+            if(obj["cate"] != "QA"):
+                compareAry.pop(i)
+
         # 回傳兩個array
         return matchAry, compareAry
 
@@ -74,7 +78,8 @@ class Response():
                 "qu_new": objData["qu_new"],
                 "qu_old": objData["qu_old"],
                 "ans": objData["ans"],
-                "con": compareCon
+                "con": compareCon,
+                "cate": objData["categories"]  # 要註明類別
             }
             compareAry.insert(0, obj)
             if(len(compareAry) > 4):
@@ -104,8 +109,8 @@ class Response():
                 count += 1
 
         leng = len(self.input)
-        if(leng == 0):
-            confidence = 0
-        else:
+        try:
             confidence = count / leng
+        except ZeroDivisionError:
+            confidence = 0
         return confidence

@@ -1,33 +1,34 @@
 # coding=utf-8
 from flask import request
-# import lib.fbClass as fbClass
 import config
 import requests
-import json
 from lib.botClass import botClass
 import lib.responseLogic as responseLogic
+import time as T
+import logging
+import logging.config
 
 
 def fbResponse():
     if request.method == 'GET':
         return helloTokenFB()
     if request.method == 'POST':
-        print("--------------FacebookBot--------------")
+        timeTemp = T.time()
         text, user_id = getTextMessage()  # 這行可以得到使用者傳入的文字
-        send_typing_on(user_id)
         jsonData = requests.get('https://graph.facebook.com/v2.6/' + user_id +
                                 '?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + config.ACCESS_TOKEN).json()
         userName = str(jsonData['last_name'] + jsonData['first_name'])
 
-        # 透過分割後的response得到list中第0個元素即為confidence
         res = responseLogic.Response(text)
         directBack, response = res.get()
 
         fbclass = botClass(directBack, response, text, "fb", user_id)
-        userString = userName + '_' + user_id + ': ' + text
-        print(userString)
-        fbclass.get_format()
-        setUserLog(userString, response)
+        logging.info("使用者:" + userName + ":" + text)
+        try:
+            fbclass.get_format()
+        except Exception as err:
+            logging.error("錯誤訊息：" + err["error"]["message"] + '\n')
+        logging.info("一次處理時間: " + str(T.time() - timeTemp))
         return "Success"
 
 
@@ -42,7 +43,6 @@ def getTextMessage():
     text = ''
     recipient_id = ''
     output = request.get_json()
-    print(output)
     messaging = output['entry'][0]['messaging'][0]
     recipient_id = messaging['sender']['id']
     if(messaging.get('message') and messaging['message'].get('text')):
@@ -52,20 +52,3 @@ def getTextMessage():
     else:
         pass
     return text, recipient_id  # 抓不到就回傳空字串
-
-
-def send_typing_on(to):
-    post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token={token}'.format(token=config.ACCESS_TOKEN)
-    response_message = json.dumps({"recipient": {"id": to},
-                                   "sender_action": "typing_on"})
-    req = requests.post(post_message_url,
-                        headers={"Content-Type": "application/json"},
-                        data=response_message)
-    print("[{}] Reply to {}", req, to)
-
-
-def setUserLog(userString, response):
-    userDataLog = open("userdataFB.log", mode='a', encoding='utf-8')
-    userDataLog.write(
-        userString + '\n' + response[0]["ans"] + '\n')
-    userDataLog.close()
