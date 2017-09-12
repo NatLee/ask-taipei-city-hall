@@ -9,11 +9,9 @@ from linebot.models import (
     TemplateSendMessage,
     ButtonsTemplate,
     TextSendMessage,
-    ImageSendMessage,
     URITemplateAction
 )
 import config
-
 import logging
 import logging.config
 
