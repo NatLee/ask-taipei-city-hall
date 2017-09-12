@@ -58,7 +58,6 @@ def getHandleMessage(line_bot_api, event):
     # 丟入使用者輸入的資料得到response
     res = responseLogic.Response(event.message.text)
     directBack, response = res.get()
-
     logging.info("使用者:" + userString)
     # 設定回傳的訊息
     lineclass = botClass(directBack, response, event.message.text, "line", 0)
@@ -73,6 +72,9 @@ def getHandleMessage(line_bot_api, event):
         else:
             line_bot_api.reply_message(event.reply_token, send)
     except linebot.exceptions.LineBotApiError as e:
+        logging.error(send)
         logging.error(e)
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='啊哦！關於這個問題或許我們遇到了點麻煩。'))
+        line_bot_api.push_message(
+            event.source.user_id,
+            TextSendMessage(text='啊哦！關於這個問題或許我們遇到了點麻煩。'))
     logging.info("一次處理時間: " + str(T.time() - timeTemp))
