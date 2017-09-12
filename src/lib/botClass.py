@@ -85,8 +85,8 @@ class botClass:
                     title='對不起，我不太懂您的問題',
                     text='(,,・ω・,,)我餵了估狗，希望對您有幫助，點選按鈕直接搜尋！',
                     actions=[URITemplateAction(
-                        label=self.input_message,
-                        uri=google_url + self.input_message
+                        label=self.input_message.replace(" ","&"), #裡面不可有空白 身分證
+                        uri=google_url + self.input_message.replace(" ","&")
                     )],
                 )
             ))
