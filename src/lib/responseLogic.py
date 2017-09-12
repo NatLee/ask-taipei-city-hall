@@ -17,7 +17,7 @@ class Response():
         # 直接回傳
         directBack = True
         # 信心水準處理事件
-        if matchList and matchList[0]["con"] > 0.5:  # 可以直接回
+        if matchList and matchList[0]["con"] > 0.65:  # 可以直接回
             result = matchList
         else:  # 要詢問是否要問是否為compareList這幾項問題
             directBack = False
@@ -79,7 +79,7 @@ class Response():
                 break
 
     def compare_with_list(self, compareAry, objData):
-        compareCon = self.compare(objData["qu_new"]) # compare 比對藥用有斷詞的
+        compareCon = self.compare(objData["qu_new"])  # compare 比對藥用有斷詞的
         if(compareCon == 1):
             obj = {
                 "qu_new": objData["qu_new"],
