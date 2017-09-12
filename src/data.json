@@ -52720,5 +52720,23 @@
     "qu_old": "你會死",
     "ans": "比活著的時候還好。",
     "categories": "AI"
+  },
+  {
+    "qu_new": "掰掰",
+    "qu_old": "掰掰",
+    "ans": "再見了QQ",
+    "categories": "greetings"
+  },
+  {
+    "qu_new": "SEE YOU",
+    "qu_old": "SEE YOU",
+    "ans": "see you soon",
+    "categories": "greetings"
+  },
+  {
+    "qu_new": "88",
+    "qu_old": "88",
+    "ans": "881~",
+    "categories": "greetings"
   }
 ]
