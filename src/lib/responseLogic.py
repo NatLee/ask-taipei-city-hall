@@ -61,7 +61,7 @@ class Response():
         return matchAry, compareAry
 
     def match_with_list(self, matchAry, objData):
-        q = objData["qu_new"]
+        q = objData["qu_old"]  # match 比對要用有沒有斷詞的
         con = SequenceMatcher(None, q, self.input).ratio()
         for i in range(len(matchAry)):
             obj = matchAry[i]
@@ -79,7 +79,7 @@ class Response():
                 break
 
     def compare_with_list(self, compareAry, objData):
-        compareCon = self.compare(objData["qu_new"])
+        compareCon = self.compare(objData["qu_new"]) # compare 比對藥用有斷詞的
         if(compareCon == 1):
             obj = {
                 "qu_new": objData["qu_new"],
