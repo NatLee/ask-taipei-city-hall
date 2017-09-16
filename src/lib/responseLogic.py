@@ -24,15 +24,10 @@ class Response():
             result = compareList
             # 這邊都是低信心水準的 裡面只能留QA值
             self.filterDataByQA(matchList)
+            self.filterDataByCon(matchList, 0.2)
             if matchList and len(compareList) == 0:
                 result = matchList
         return directBack, result
-
-    def filterDataByQA(self, dataList):
-        for i in range(len(dataList) - 1, -1, -1):
-            obj = dataList[i]
-            if(obj["cate"] != "QA"):
-                dataList.pop(i)
 
     def getList(self):
         # 載入所有的問答資料
@@ -49,10 +44,7 @@ class Response():
             self.compare_with_list(compareAry, objData)
 
         # 要清空con == 0 的 obj 用pop所以迴圈要從後面算
-        for i in range(len(matchAry) - 1, -1, -1):
-            obj = matchAry[i]
-            if(obj["con"] == 0):
-                matchAry.pop(i)
+        self.filterDataByCon(matchAry, 0)
 
         # compare裡面應該要出現類別為QA的應對回答 不然就要拿掉
         self.filterDataByQA(compareAry)
@@ -84,13 +76,25 @@ class Response():
             obj = {
                 "qu_new": objData["qu_new"],
                 "qu_old": objData["qu_old"],
-                "ans": objData["ans"],
                 "con": compareCon,
+                "ans": objData["ans"],
                 "cate": objData["categories"]  # 要註明類別
             }
             compareAry.insert(0, obj)
             if(len(compareAry) > 3):
                 compareAry.pop()
+
+    def filterDataByCon(self, matchAry, con):
+        for i in range(len(matchAry) - 1, -1, -1):
+            obj = matchAry[i]
+            if(obj["con"] <= con):
+                matchAry.pop(i)
+
+    def filterDataByQA(self, dataList):
+        for i in range(len(dataList) - 1, -1, -1):
+            obj = dataList[i]
+            if(obj["cate"] != "QA"):
+                dataList.pop(i)
 
     def getModel(self):
         return [
