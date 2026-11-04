@@ -1,0 +1,58 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+  workflow_dispatch:
+  # The FAQ is fetched at build time, so rebuild weekly to pick up new questions
+  # (Mondays 04:00 Taipei time).
+  schedule:
+    - cron: '0 20 * * 0'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    # Deploy only what lands on the default branch.
+    if: github.ref_name == github.event.repository.default_branch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - id: pages
+        uses: actions/configure-pages@v6
+      - run: npm ci
+      - uses: actions/cache@v6
+        with:
+          path: .cache/raw
+          key: open-data-${{ github.run_id }}
+          restore-keys: open-data-
+      - name: Build the FAQ dataset from the live open data
+        run: npm run data:build
+      - name: Build the site
+        run: npm run build
+        env:
+          # e.g. /ask-taipei-city-hall for a project site; vite.config.ts adds the slashes.
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

@@ -1,0 +1,45 @@
+{
+  "$comment": "Open data that scripts/data/build.ts downloads at build time. Later sources override earlier ones for the same DataSN, so the small live feeds (newer, with a page link for each question) come after the full dump. A source that is not required may fail without failing the build. Relative links inside answers are resolved against contentBaseUrl. The build stops if fewer than minimumEntries questions survive, so a truncated download never replaces a good site.",
+  "minimumEntries": 1000,
+  "sources": [
+    {
+      "id": "taipei-faq",
+      "name": "臺北市市政網站整合平台之常見問答",
+      "provider": "臺北市政府資訊局",
+      "datasetUrl": "https://data.taipei/dataset/detail?id=203f1657-bb4a-45a7-b25f-279b63136645",
+      "downloadUrl": "https://data.taipei/api/dataset/203f1657-bb4a-45a7-b25f-279b63136645/resource/1e344a1f-b926-4f37-8d92-3862156262e9/download",
+      "license": {
+        "title": "政府資料開放授權條款－第1版",
+        "url": "https://data.gov.tw/license"
+      },
+      "contentBaseUrl": "https://www.gov.taipei/",
+      "required": true
+    },
+    {
+      "id": "taipei-faq-latest",
+      "name": "臺北市市政網站整合平台之常見問答（最新 50 筆）",
+      "provider": "臺北市政府資訊局",
+      "datasetUrl": "https://data.taipei/dataset/detail?id=203f1657-bb4a-45a7-b25f-279b63136645",
+      "downloadUrl": "https://www.gov.taipei/OpenData.aspx?SN=8E47DBEDAB8AE0D9",
+      "license": {
+        "title": "政府資料開放授權條款－第1版",
+        "url": "https://data.gov.tw/license"
+      },
+      "contentBaseUrl": "https://www.gov.taipei/",
+      "required": false
+    },
+    {
+      "id": "dorts-faq",
+      "name": "臺北市政府捷運工程局常見問答",
+      "provider": "臺北市政府捷運工程局",
+      "datasetUrl": "https://data.taipei/dataset/detail?id=cb7269a6-2614-4a91-a6b4-bd2a20d6ec65",
+      "downloadUrl": "https://www.dorts.gov.taipei/OpenData.aspx?SN=FC64DCB68420D08A",
+      "license": {
+        "title": "政府資料開放授權條款－第1版",
+        "url": "https://data.gov.tw/license"
+      },
+      "contentBaseUrl": "https://www.dorts.gov.taipei/",
+      "required": false
+    }
+  ]
+}

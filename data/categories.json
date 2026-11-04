@@ -1,0 +1,21 @@
+{
+  "$comment": "The FAQ data has no topic field, so questions are grouped by who published them (發布單位). Each rule lists substrings of the unit name; the first rule that matches wins. Units that match nothing go to the fallback. `npm run data:build` prints the units that ended up in the fallback so new ones can be added here.",
+  "rules": [
+    { "id": "welfare", "name": "社會福利", "icon": "heart-handshake", "match": ["社會局", "家庭暴力暨性侵害防治中心", "陽明教養院", "浩然敬老院"] },
+    { "id": "labor", "name": "勞動與就業", "icon": "briefcase", "match": ["勞動", "就業服務處", "職能發展學院"] },
+    { "id": "tax", "name": "稅務與財政", "icon": "receipt", "match": ["稅捐稽徵處", "財政局", "動產質借處", "主計處"] },
+    { "id": "transport", "name": "交通與捷運", "icon": "bus", "match": ["交通", "停車管理工程處", "公共運輸處", "捷運", "區工程處", "纜車"] },
+    { "id": "environment", "name": "環境與清潔", "icon": "leaf", "match": ["環境保護局"] },
+    { "id": "animals", "name": "動物", "icon": "paw-print", "match": ["動物"] },
+    { "id": "health", "name": "醫療衛生", "icon": "stethoscope", "match": ["衛生局", "聯合醫院"] },
+    { "id": "business", "name": "產業與商業", "icon": "store", "match": ["產業發展局", "商業處", "市場處"] },
+    { "id": "housing", "name": "地政、建築與都更", "icon": "building-2", "match": ["地政", "建築管理", "都市發展局", "都市更新", "都市計畫"] },
+    { "id": "utilities", "name": "工程與水資源", "icon": "droplets", "match": ["工務局", "自來水", "翡翠水庫"] },
+    { "id": "education", "name": "教育與青年", "icon": "graduation-cap", "match": ["教育", "青年局", "圖書館", "天文科學"] },
+    { "id": "culture", "name": "文化、觀光與運動", "icon": "palette", "match": ["文化局", "觀光傳播局", "體育局", "藝文推廣處", "中山堂", "文獻館", "孔廟", "國樂團", "美術館", "交響樂團"] },
+    { "id": "safety", "name": "治安與消防", "icon": "shield", "match": ["警察局", "消防局"] },
+    { "id": "civil", "name": "民政與戶政", "icon": "id-card", "match": ["民政局", "區公所", "戶政", "兵役局", "殯葬", "原住民族", "客家"] },
+    { "id": "government", "name": "市政與法務", "icon": "landmark", "match": ["法務局", "資訊局", "人事處", "公務人員訓練處", "研究發展考核", "秘書處", "市政大樓", "政風處"] }
+  ],
+  "fallback": { "id": "other", "name": "其他", "icon": "circle-help" }
+}

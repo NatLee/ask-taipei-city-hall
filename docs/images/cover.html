@@ -1,0 +1,254 @@
+<!doctype html>
+<!--
+  Cover image for the README and the GitHub social preview (1280×640).
+  Re-render from the repository root with headless Edge or Chrome:
+    msedge --headless=new --disable-gpu --hide-scrollbars --window-size=1280,640 \
+      --screenshot=docs/images/cover.png docs/images/cover.html
+-->
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      :root {
+        --brand: #0f766e;
+        --brand-dark: #115e59;
+        --brand-soft: #ccfbf1;
+        --amber: #f59e0b;
+        --ink: #0f172a;
+        --muted: #475569;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+      body {
+        width: 1280px;
+        height: 640px;
+        overflow: hidden;
+        font-family: 'Microsoft JhengHei', 'PingFang TC', 'Noto Sans TC', sans-serif;
+        color: var(--ink);
+        background-color: #fafaf9;
+        background-image:
+          linear-gradient(to right, rgb(15 23 42 / 0.05) 1px, transparent 1px),
+          linear-gradient(to bottom, rgb(15 23 42 / 0.05) 1px, transparent 1px);
+        background-size: 32px 32px;
+        display: grid;
+        grid-template-columns: 620px 1fr;
+        gap: 40px;
+        padding: 64px 64px 0 72px;
+        position: relative;
+      }
+      .left {
+        display: flex;
+        flex-direction: column;
+      }
+      .badge {
+        align-self: flex-start;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 16px;
+        border-radius: 999px;
+        background: #fef3c7;
+        color: #92400e;
+        font-size: 22px;
+        font-weight: 700;
+      }
+      h1 {
+        margin-top: 26px;
+        font-size: 84px;
+        line-height: 1.05;
+        font-weight: 900;
+        letter-spacing: -1px;
+      }
+      .en {
+        margin-top: 12px;
+        font-size: 32px;
+        font-weight: 600;
+        color: var(--brand);
+        font-family: 'Segoe UI', system-ui, sans-serif;
+      }
+      .tagline {
+        margin-top: 26px;
+        font-size: 28px;
+        line-height: 1.5;
+        color: var(--muted);
+      }
+      .tagline b {
+        color: var(--ink);
+      }
+      .flow {
+        position: absolute;
+        left: 72px;
+        right: 64px;
+        bottom: 40px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-size: 22px;
+        font-weight: 700;
+      }
+      .step {
+        padding: 12px 18px;
+        border-radius: 14px;
+        background: white;
+        border: 2px solid #cbd5e1;
+        white-space: nowrap;
+      }
+      .step.ai {
+        border-style: dashed;
+        border-color: var(--amber);
+        background: #fffbeb;
+      }
+      .arrow {
+        color: var(--brand);
+        font-size: 30px;
+        font-weight: 900;
+      }
+      .phone {
+        width: 470px;
+        height: 470px;
+        border-radius: 32px;
+        background: white;
+        border: 2px solid #e2e8f0;
+        box-shadow: 0 30px 60px -20px rgb(15 23 42 / 0.35);
+        padding: 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .user {
+        align-self: flex-end;
+        background: var(--brand);
+        color: white;
+        padding: 12px 18px;
+        border-radius: 20px 20px 4px 20px;
+        font-size: 24px;
+        font-weight: 600;
+      }
+      .bot {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+      }
+      .avatar {
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        border: 3px solid #fcd34d;
+        background: white url('../../public/yee.png') center / cover no-repeat;
+        flex-shrink: 0;
+      }
+      .card {
+        flex: 1;
+        border: 2px solid #e2e8f0;
+        border-radius: 18px;
+        padding: 14px 16px;
+      }
+      .q {
+        font-size: 22px;
+        font-weight: 800;
+        line-height: 1.35;
+      }
+      .q span {
+        color: var(--brand);
+        margin-right: 6px;
+      }
+      .pill {
+        display: inline-block;
+        margin-top: 8px;
+        padding: 2px 10px;
+        border-radius: 999px;
+        background: var(--brand-soft);
+        color: var(--brand-dark);
+        font-size: 16px;
+        font-weight: 700;
+      }
+      .a {
+        margin-top: 8px;
+        font-size: 18px;
+        line-height: 1.55;
+        color: var(--muted);
+      }
+      .cite {
+        display: inline-block;
+        min-width: 22px;
+        padding: 0 5px;
+        border-radius: 6px;
+        background: var(--brand-soft);
+        color: var(--brand-dark);
+        font-size: 14px;
+        font-weight: 800;
+        text-align: center;
+        vertical-align: super;
+      }
+      .related {
+        margin-left: 66px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .related small {
+        font-size: 15px;
+        color: #64748b;
+      }
+      .chip {
+        align-self: flex-start;
+        padding: 6px 14px;
+        border-radius: 999px;
+        border: 2px solid #99f6e4;
+        background: #f0fdfa;
+        color: var(--brand-dark);
+        font-size: 17px;
+        font-weight: 600;
+      }
+      .foot {
+        margin-top: 10px;
+        padding-top: 8px;
+        border-top: 1px solid #f1f5f9;
+        font-size: 15px;
+        color: #64748b;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="left">
+      <span class="badge">★ 2017 台北市政 ChatBot 應用競賽作品 · 2026 重製</span>
+      <h1>問問<br />台北市政府</h1>
+      <p class="en">Ask Taipei City Hall</p>
+      <p class="tagline">
+        <b>8,284 則市政 FAQ</b>，在瀏覽器裡搜尋，<br />每個答案都附出處；也能用自己的<br /><b>Claude API key</b> 讓 AI 整理答案。
+      </p>
+    </div>
+
+    <div class="phone" aria-hidden="true">
+      <p class="user">敬老卡掉了怎麼辦？</p>
+      <div class="bot">
+        <span class="avatar"></span>
+        <div class="card">
+          <p class="q"><span>Q</span>敬老悠遊卡遺失該怎麼辦？</p>
+          <span class="pill">社會福利 · 社會局老人福利科</span>
+          <p class="a">
+            請先打電話至 412-8880 辦理掛失<span class="cite">1</span>，再帶身分證和照片到任一區公所申請補發<span class="cite">2</span>。
+          </p>
+          <p class="foot">2018-06-28 更新 · 原始網頁 · 分享</p>
+        </div>
+      </div>
+      <div class="related">
+        <small>你可能還想問</small>
+        <span class="chip">申請(含遺失補發)敬老悠遊卡需多久時間？</span>
+        <span class="chip">申請敬老卡服務對象及應備文件為何？</span>
+      </div>
+    </div>
+
+    <div class="flow">
+      <span class="step">臺北市政府開放資料</span>
+      <span class="arrow">→</span>
+      <span class="step">瀏覽器內 BM25 檢索</span>
+      <span class="arrow">→</span>
+      <span class="step">答案＋出處</span>
+      <span class="arrow">→</span>
+      <span class="step ai">（選用）Claude 整理</span>
+    </div>
+  </body>
+</html>

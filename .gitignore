@@ -1,11 +1,12 @@
-*.db
-*.sqlite3
-mongod.lock
-WiredTiger
-WiredTiger.lock
-WiredTiger.wt
-WiredTiger.wt.1
-data/
-__pycache__/
+# dependencies and build output
+node_modules/
+dist/
+coverage/
+
+# generated at build time by `npm run data:build` (see data/sources.json)
+public/data/
+# last successful downloads, reused when a source is unreachable
+.cache/
+
 *.log
-*.pyc
+.DS_Store
