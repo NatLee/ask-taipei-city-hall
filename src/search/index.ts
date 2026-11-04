@@ -159,14 +159,19 @@ export class FaqIndex {
     for (const term of tokenize(prepared.text, { segmenter: this.segmenter, chars: true })) {
       add(term, term.startsWith(CHAR_PREFIX) ? RANKING.charTermWeight : 1);
     }
-    for (const { others } of prepared.synonyms) {
-      for (const member of others) {
-        // A one-character synonym (犬) only exists in the index as a character term.
-        const terms = [...member].length === 1 ? [CHAR_PREFIX + member] : tokenize(member, { segmenter: this.segmenter });
-        for (const term of terms) add(term, SYNONYM_WEIGHT);
-      }
+    // A synonym group is one idea: every member counts the same, whichever one the
+    // visitor typed. Otherwise a rare colloquial word (「不見」) outweighs the
+    // word the FAQ actually uses (「遺失」).
+    for (const { typed, others } of prepared.synonyms) {
+      for (const member of typed) for (const term of this.memberTerms(member)) if (weights.has(term)) weights.set(term, SYNONYM_WEIGHT);
+      for (const member of others) for (const term of this.memberTerms(member)) add(term, SYNONYM_WEIGHT);
     }
     return [...weights].map(([term, weight]) => ({ term, weight }));
+  }
+
+  /** Terms for one synonym; a one-character synonym (犬) only exists in the index as a character term. */
+  private memberTerms(member: string): string[] {
+    return [...member].length === 1 ? [CHAR_PREFIX + member] : tokenize(member, { segmenter: this.segmenter });
   }
 
   search(query: string, options: SearchOptions = {}): ScoredHit[] {

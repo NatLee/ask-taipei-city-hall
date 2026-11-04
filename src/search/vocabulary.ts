@@ -16,7 +16,7 @@ export const QUESTION_WORDS = [
 ];
 
 /** Sentence-final particles, removed only at the end of the query. */
-export const FINAL_PARTICLES = ['嗎', '呢', '吧', '啊', '呀'];
+export const FINAL_PARTICLES = ['嗎', '呢', '吧', '啊', '呀', '了'];
 
 /**
  * Everyday words next to the words the city's FAQ uses. When a query contains
@@ -36,6 +36,7 @@ export const SYNONYM_GROUPS: readonly (readonly string[])[] = [
   ['身份證', '身分證'],
   ['幾點', '時間'],
   ['不亮', '故障', '失明'],
+  ['掉了', '弄丟', '不見', '遺失'],
 ];
 
 /** How much a synonym counts compared with the word the visitor typed. */

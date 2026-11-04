@@ -33,6 +33,10 @@ describe('SearchService.search', () => {
     expect(topQuestion('導盲狗可以摸嗎')).toBe('導盲犬可以摸或餵食嗎?');
   });
 
+  it('weighs every member of a synonym group the same (不見了 → 遺失)', () => {
+    expect(topQuestion('護眼卡不見了')).toBe('護眼護照或護眼卡遺失，怎麼辦？');
+  });
+
   it('answers directly when one question clearly matches', () => {
     const response = service.search('酒駕累犯怎麼罰');
     expect(response.verdict).toBe('direct');
