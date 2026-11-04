@@ -21,7 +21,7 @@ export const HOTLINE = {
 
 /** Search pages for a question the FAQ does not cover. */
 export const SEARCH_LINKS = [
-  { name: '臺北市政府網站', url: (query: string) => `https://www.gov.taipei/Search.aspx?q=${encodeURIComponent(query)}` },
+  { name: '臺北市政府網站', url: (query: string) => `https://www.gov.taipei/Advanced_Search.aspx?q=${encodeURIComponent(query)}` },
   { name: 'Google', url: (query: string) => `https://www.google.com/search?q=${encodeURIComponent(`${query} site:gov.taipei`)}` },
 ];
 
